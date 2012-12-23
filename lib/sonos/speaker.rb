@@ -75,6 +75,33 @@ module Sonos
     alias_method :play_stream, :set_av_transport_uri
 
     #
+    # Stop playing.
+    #
+    def stop
+      action = 'urn:schemas-upnp-org:service:AVTransport:1#Stop'
+      message = '<u:Stop xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:Stop>'
+      transport_client.call(:stop, soap_action: action, message: message)
+    end
+
+    #
+    # Play the next track.
+    #
+    def next
+      action = 'urn:schemas-upnp-org:service:AVTransport:1#Next'
+      message = '<u:Next xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:Next>'
+      transport_client.call(:next, soap_action: action, message: message)
+    end
+
+    #
+    # Play the previous track.
+    #
+    def previous
+      action = 'urn:schemas-upnp-org:service:AVTransport:1#Previous'
+      message = '<u:Previous xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:Previous>'
+      transport_client.call(:previous, soap_action: action, message: message)
+    end
+
+    #
     # Get information about the Sonos speaker.
     #
     def get_speaker_info

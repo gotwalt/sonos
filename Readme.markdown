@@ -53,9 +53,6 @@ speaker.volume -= 10
 
 ## To Do
 
-* Stop
-* Next
-* Previous
 * Mute
 * Bass
 * Treble
