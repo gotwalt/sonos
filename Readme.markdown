@@ -8,15 +8,21 @@ Huge thanks to [Rahim Sonawalla](https://github.com/rahims) for making [SoCo](ht
 
 Add this line to your application's Gemfile:
 
-    gem 'sonos'
+``` ruby
+gem 'sonos'
+```
 
 And then execute:
 
-    $ bundle
+``` shell
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install sonos
+``` shell
+$ gem install sonos
+```
 
 ## Usage
 
@@ -28,25 +34,37 @@ $ irb
 ```
 
 ``` ruby
-> require 'rubygems'
-> require 'sonos'
-> speaker = Sonos::Speaker('10.0.1.10') # or whatever the IP is
+require 'rubygems'
+require 'sonos'
+speaker = Sonos::Speaker('10.0.1.10') # or whatever the IP is
 ```
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
 
 ``` ruby
-> speaker.pause # Pause whatever is playing
-> speaker.play  # Resumes the playlist
-> speaker.play 'http://assets.samsoff.es/music/Airports.mp3' # Stream!
-> speaker.now_playing
-> speaker.volume
-> speaker.volume = 70
-> speaker.volume -= 10
+speaker.pause # Pause whatever is playing
+speaker.play  # Resumes the playlist
+speaker.play 'http://assets.samsoff.es/music/Airports.mp3' # Stream!
+speaker.now_playing
+speaker.volume
+speaker.volume = 70
+speaker.volume -= 10
 ```
 
-## Todo
+## To Do
 
+* Stop
+* Next
+* Previous
+* Mute
+* Bass
+* Treble
+* Loudness
+* Party Mode
+* Join
+* Line-in
+* Status Light
+* Handle errors better
 * Fix album art in `now_playing`
 * Handle line-in in `now_playing`
 * Auto-discovery
