@@ -42,9 +42,7 @@ module Sonos
     # Pause the currently playing track.
     #
     def pause
-      action = 'urn:schemas-upnp-org:service:AVTransport:1#Pause'
-      message = '<u:Pause xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:Pause>'
-      transport_client.call(:play, soap_action: action, message: message)
+      send_transport_message :pause
     end
 
     #
@@ -58,9 +56,7 @@ module Sonos
       end
 
       # Play the currently selected track
-      action = 'urn:schemas-upnp-org:service:AVTransport:1#Play'
-      message = '<u:Play xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:Play>'
-      transport_client.call(:play, soap_action: action, message: message)
+      send_transport_message :play
     end
 
     #
@@ -78,27 +74,21 @@ module Sonos
     # Stop playing.
     #
     def stop
-      action = 'urn:schemas-upnp-org:service:AVTransport:1#Stop'
-      message = '<u:Stop xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:Stop>'
-      transport_client.call(:stop, soap_action: action, message: message)
+      send_transport_message :stop
     end
 
     #
     # Play the next track.
     #
     def next
-      action = 'urn:schemas-upnp-org:service:AVTransport:1#Next'
-      message = '<u:Next xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:Next>'
-      transport_client.call(:next, soap_action: action, message: message)
+      send_transport_message :next
     end
 
     #
     # Play the previous track.
     #
     def previous
-      action = 'urn:schemas-upnp-org:service:AVTransport:1#Previous'
-      message = '<u:Previous xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:Previous>'
-      transport_client.call(:previous, soap_action: action, message: message)
+      send_transport_message :previous
     end
 
     #
@@ -146,6 +136,13 @@ module Sonos
 
     def rendering_client
       @rendering_client ||= Savon.client endpoint: "http://#{@ip}:#{PORT}#{RENDERING_ENDPOINT}", namespace: NAMESPACE
+    end
+
+    def send_transport_message(sym)
+      name = sym.to_s.split('_').map{|e| e.capitalize}.join
+      action = "urn:schemas-upnp-org:service:AVTransport:1##{name}"
+      message = %Q{<u:#{name} xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:#{name}>}
+      transport_client.call(sym, soap_action: action, message: message)
     end
   end
 end
