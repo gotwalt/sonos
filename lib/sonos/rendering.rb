@@ -16,6 +16,32 @@ module Sonos
       send_rendering_message('SetVolume', value)
     end
 
+    # Get the current bass EQ.
+    # @return [Fixnum] the base EQ from -10 to 10
+    def bass
+      response = send_rendering_message('GetBass')
+      response.body[:get_bass_response][:current_bass].to_i
+    end
+
+    # Set the bass EQ from -10 to 10.
+    # @param [Fixnum] the desired bass EQ from -10 to 10
+    def bass=(value)
+      send_rendering_message('SetBass', value)
+    end
+
+    # Get the current treble EQ.
+    # @return [Fixnum] the treble EQ from -10 to 10
+    def treble
+      response = send_rendering_message('GetTreble')
+      response.body[:get_treble_response][:current_treble].to_i
+    end
+
+    # Set the treble EQ from -10 to 10.
+    # @param [Fixnum] the desired treble EQ from -10 to 10
+    def treble=(value)
+      send_rendering_message('SetTreble', value)
+    end
+
     # Mute the speaker
     def mute
       set_mute(true)

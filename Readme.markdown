@@ -53,8 +53,6 @@ speaker.volume -= 10
 
 ## To Do
 
-* Bass
-* Treble
 * Loudness
 * Party Mode
 * Join
