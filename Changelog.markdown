@@ -1,3 +1,7 @@
+### Version 0.2.1 — December 24, 2012
+
+* Fix album art in now playing
+
 ### Version 0.2.0 — December 24, 2012
 
 * Add Loudness setting

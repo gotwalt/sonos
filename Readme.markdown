@@ -70,7 +70,6 @@ There is a very limited CLI right now. You can run `sonos discover` to get the I
 * Nonblocking calls with Celluloid::IO
 * List other speakers
 * Handle errors better
-* Fix album art in `now_playing`
 * Handle line-in in `now_playing`
 * Better support for stero pairs
 * CLI client for everything

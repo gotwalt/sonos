@@ -1,3 +1,5 @@
+require 'uri'
+
 module Sonos::Endpoint::Transport
   TRANSPORT_ENDPOINT = '/MediaRenderer/AVTransport/Control'
   TRANSPORT_XMLNS = 'urn:schemas-upnp-org:service:AVTransport:1'
@@ -9,6 +11,11 @@ module Sonos::Endpoint::Transport
     body = response.body[:get_position_info_response]
     doc = Nokogiri::XML(body[:track_meta_data])
 
+    art_path = doc.xpath('//upnp:albumArtURI').inner_text
+
+    # TODO: No idea why this is necessary. Maybe its a Nokogiri thing
+    art_path.sub!('/getaa?s=1=x-sonos-http', '/getaa?s=1&u=x-sonos-http')
+
     {
       title: doc.xpath('//dc:title').inner_text,
       artist: doc.xpath('//dc:creator').inner_text,
@@ -17,7 +24,7 @@ module Sonos::Endpoint::Transport
       track_duration: body[:track_duration],
       current_position: body[:rel_time],
       uri: body[:track_uri],
-      album_art: "http://#{self.ip}:#{PORT}#{doc.xpath('//upnp:albumArtURI').inner_text}"
+      album_art: "http://#{self.ip}:#{Sonos::PORT}#{art_path}"
     }
   end
 

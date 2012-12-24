@@ -18,5 +18,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   gem.add_dependency 'savon', '~> 2.0.2'
+  gem.add_dependency 'nokogiri'
   gem.add_dependency 'thor'
 end
