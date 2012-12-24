@@ -1,17 +1,14 @@
 require 'savon'
 require 'open-uri'
-require 'sonos/transport'
-require 'sonos/rendering'
-require 'sonos/device'
-require 'sonos/content_directory'
+require 'sonos/endpoint'
 require 'sonos/topology'
 
 module Sonos
   class Speaker
-    include Transport
-    include Rendering
-    include Device
-    include ContentDirectory
+    include Endpoint::Transport
+    include Endpoint::Rendering
+    include Endpoint::Device
+    include Endpoint::ContentDirectory
     include Topology
 
     attr_reader :ip, :zone_name, :zone_icon, :uid, :serial_number, :software_version, :hardware_version, :mac_address

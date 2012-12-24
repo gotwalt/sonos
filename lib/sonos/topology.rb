@@ -2,7 +2,6 @@ require 'uri'
 
 module Sonos
   module Topology
-
     def topology
       doc = Nokogiri::XML(open("http://#{@ip}:#{PORT}/status/topology"))
 
@@ -11,7 +10,7 @@ module Sonos
       end
     end
 
-    protected
+  protected
 
     class Node
       attr_accessor :name, :group, :coordinator, :location, :version, :uuid

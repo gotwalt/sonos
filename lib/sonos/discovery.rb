@@ -13,12 +13,11 @@ require 'timeout'
 
 module Sonos
   class Discovery
-
-    MULTICAST_ADDR = "239.255.255.250"
+    MULTICAST_ADDR = '239.255.255.250'
     MULTICAST_PORT = 1900
     DEFAULT_TIMEOUT = 1
 
-    attr_accessor :timeout
+    attr_reader :timeout
 
     def initialize(timeout = nil)
       @timeout = timeout || DEFAULT_TIMEOUT
@@ -32,8 +31,10 @@ module Sonos
       Sonos::Speaker.new(result) if result
     end
 
+  private
+
     def send_discovery_message
-      # request announcements
+      # Request announcements
       @socket.send(search_message, 0, MULTICAST_ADDR, MULTICAST_PORT)
     end
 
@@ -52,10 +53,10 @@ module Sonos
     end
 
     def initialize_socket
-      # create a socket
+      # Create a socket
       @socket = UDPSocket.open
 
-      # we're going to use IP with the multicast TTL. Mystery third parameter is a mystery.
+      # We're going to use IP with the multicast TTL. Mystery third parameter is a mystery.
       @socket.setsockopt(Socket::IPPROTO_IP, Socket::IP_MULTICAST_TTL, 2)
     end
 
