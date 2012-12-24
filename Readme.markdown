@@ -37,7 +37,7 @@ $ irb
 require 'rubygems'
 require 'sonos'
 speakers = Sonos.discover.topology.map(&:speaker)
-speakers = speaker.first
+speaker = speakers.first
 ```
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
@@ -50,6 +50,9 @@ speaker.now_playing
 speaker.volume
 speaker.volume = 70
 speaker.volume -= 10
+speaker.queue
+speaker.save_queue 'Jams'
+speaker.clear_queue
 ```
 
 
