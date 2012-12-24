@@ -1,28 +1,34 @@
+### Version 0.2.0 - Unreleased
+
+* Moved `sonos-discover` to `sonos discover`
+* Moved `sonos-discover-multiple` to `sonos discover --all`
+* Cleaned up enpoints
+
 ### Version 0.1.1 — December 24, 2012
 
-* **Feature:** Queue
-* **Feature:** Clear Queue
-* **Feature:** Save Queue
-* **Feature:** Device Description URL
+* Add Queue
+* Add Clear Queue
+* Add Save Queue
+* Add Device Description URL
 
 ### Version 0.1.0 — December 24, 2012
 
-* **Feature:** Stop
-* **Feature:** Next
-* **Feature:** Previous
-* **Feature:** Mute
-* **Feature:** Status Light
-* **Feature:** Bass
-* **Feature:** Treble
+* Add Stop
+* Add Next
+* Add Previous
+* Add Mute
+* Add Status Light
+* Add Bass
+* Add Treble
 * Remove some method aliases
 
 ### Version 0.0.1 — December 23, 2012
 
 Initial release.
 
-* **Feature:** Volume
-* **Feature:** Play
-* **Feature:** Play Stream
-* **Feature:** Pause
-* **Feature:** Now Playing
+* Add Volume
+* Add Play
+* Add Play Stream
+* Add Pause
+* Add Now Playing
 

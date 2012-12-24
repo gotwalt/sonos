@@ -36,8 +36,7 @@ $ irb
 ``` ruby
 require 'rubygems'
 require 'sonos'
-speakers = Sonos.discover.topology.map(&:speaker)
-speaker = speakers.first
+speaker = Sonos.discover
 ```
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
@@ -55,6 +54,13 @@ speaker.save_queue 'Jams'
 speaker.clear_queue
 ```
 
+### Topology
+
+`Sonos.discover` finds the first speaker it can. We can get all of the Sonos devices (including Bridges, etc) by calling `speaker.topology`. This is going to get refactored a bit. Right now everything is nested under speaker which is kinda messy and confusing.
+
+### CLI
+
+There is a very limited CLI right now. You can run `sonos discover` to get the IP of one of your devices. Run `sonos discover --all` to get all of them.
 
 ## To Do
 
