@@ -2,6 +2,7 @@ require 'savon'
 require 'sonos/transport'
 require 'sonos/rendering'
 require 'sonos/device'
+require 'open-uri'
 
 module Sonos
   class Speaker
