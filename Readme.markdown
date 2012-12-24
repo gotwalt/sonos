@@ -67,7 +67,6 @@ There is a very limited CLI right now. You can run `sonos discover` to get the I
 * Refactor all of the things
 * Nonblocking calls with Celluloid::IO
 * List other speakers
-* Loudness
 * Alarm clock
 * Group management
     * Party Mode
