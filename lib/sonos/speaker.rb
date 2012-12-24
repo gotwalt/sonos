@@ -18,6 +18,11 @@ module Sonos
       get_status
     end
 
+    # URL for giant dump of device information
+    def device_description_url
+      "http://#{self.ip}:#{PORT}/xml/device_description.xml"
+    end
+
   private
 
     # Get information about the speaker.
