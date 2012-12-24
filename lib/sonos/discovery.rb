@@ -14,37 +14,34 @@ require 'timeout'
 module Sonos
   class Discovery
 
-    PLAYER_SEARCH = "M-SEARCH * HTTP/1.1
-HOST: 239.255.255.250:reservedSSDPport
-MAN: ssdp:discover
-MX: 1
-ST: urn:schemas-upnp-org:device:ZonePlayer:1"
-
     MULTICAST_ADDR = "239.255.255.250"
     MULTICAST_PORT = 1900
+    DEFAULT_TIMEOUT = 1
 
-    SEARCH_TIMEOUT = 1
+    attr_accessor :timeout
 
-    def initialize
+    def initialize(timeout = nil)
+      @timeout = timeout || DEFAULT_TIMEOUT
+
       initialize_socket
     end
 
-    def discover(timeout = nil)
+    def discover
       send_discovery_message
-      listen_for_responses( timeout ||= SEARCH_TIMEOUT)
+      listen_for_responses
     end
 
-    def discover_multiple(timeout = nil)
+    def discover_multiple
       send_discovery_message
-      listen_for_multiple_responses( timeout ||= SEARCH_TIMEOUT)
+      listen_for_multiple_responses
     end
 
     def send_discovery_message
       # request announcements
-      @socket.send(PLAYER_SEARCH, 0, MULTICAST_ADDR, MULTICAST_PORT)
+      @socket.send(search_message, 0, MULTICAST_ADDR, MULTICAST_PORT)
     end
 
-    def listen_for_responses(timeout)
+    def listen_for_responses
       begin
         Timeout::timeout(timeout) do
           loop do
@@ -54,11 +51,11 @@ ST: urn:schemas-upnp-org:device:ZonePlayer:1"
           end
         end
       rescue Timeout::Error => ex
-        raise SonosNotFoundError.new
+        nil
       end
     end
 
-    def listen_for_multiple_responses(timeout)
+    def listen_for_multiple_responses
       results = []
 
       begin
@@ -73,7 +70,7 @@ ST: urn:schemas-upnp-org:device:ZonePlayer:1"
         # this one's expected, as we're just hanging out and trying to find stuff
       end
 
-      results
+      results.uniq.sort
     end
 
     def initialize_socket
@@ -84,6 +81,14 @@ ST: urn:schemas-upnp-org:device:ZonePlayer:1"
       @socket.setsockopt(Socket::IPPROTO_IP, Socket::IP_MULTICAST_TTL, 2)
     end
 
-    class SonosNotFoundError < StandardError; end
+    def search_message
+     [
+        'M-SEARCH * HTTP/1.1',
+        "HOST: #{MULTICAST_ADDR}:reservedSSDPport",
+        'MAN: ssdp:discover',
+        "MX: #{timeout}",
+        "ST: urn:schemas-upnp-org:device:ZonePlayer:1"
+      ].join("\n")
+    end
   end
 end
