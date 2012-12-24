@@ -4,4 +4,8 @@ lib = File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'sonos'
 
-puts Sonos.discover_multiple
+if speaker = Sonos.discover
+  speaker.topology.each do |node|
+    puts "#{node.name.ljust(20)} #{node.ip}"
+  end
+end

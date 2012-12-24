@@ -13,8 +13,4 @@ module Sonos
   def self.discover
     Sonos::Discovery.new.discover
   end
-
-  def self.discover_multiple
-    Sonos::Discovery.new.discover_multiple
-  end
 end

@@ -28,12 +28,8 @@ module Sonos
 
     def discover
       send_discovery_message
-      listen_for_responses
-    end
-
-    def discover_multiple
-      send_discovery_message
-      listen_for_multiple_responses
+      result = listen_for_responses
+      Sonos::Speaker.new(result) if result
     end
 
     def send_discovery_message
@@ -53,24 +49,6 @@ module Sonos
       rescue Timeout::Error => ex
         nil
       end
-    end
-
-    def listen_for_multiple_responses
-      results = []
-
-      begin
-        Timeout::timeout(timeout) do
-          loop do
-            message, info = @socket.recvfrom(2048)
-            # return the IP address
-            results << info[2]
-          end
-        end
-      rescue Timeout::Error => ex
-        # this one's expected, as we're just hanging out and trying to find stuff
-      end
-
-      results.uniq.sort
     end
 
     def initialize_socket
