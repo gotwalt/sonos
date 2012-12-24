@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Sonos::VERSION
   gem.authors       = ['Sam Soffes']
   gem.email         = ['sam@soff.es']
-  gem.description   = 'Sonos Controller'
-  gem.summary       = 'Control Sonos speakers with Ruby'
+  gem.description   = 'Control Sonos speakers with Ruby'
+  gem.summary       = gem.description
   gem.homepage      = 'https://github.com/soffes/sonos'
 
   gem.files         = `git ls-files`.split($/)
