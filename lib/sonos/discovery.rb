@@ -28,7 +28,7 @@ module Sonos
     def discover
       send_discovery_message
       result = listen_for_responses
-      Sonos::Speaker.new(result) if result
+      Sonos::Device::Speaker.new(result) if result
     end
 
   private

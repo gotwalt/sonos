@@ -1,23 +1,15 @@
-require 'savon'
 require 'open-uri'
-require 'sonos/endpoint'
-require 'sonos/topology'
+require 'nokogiri'
 
-module Sonos
-  class Speaker
-    include Endpoint::Transport
-    include Endpoint::Rendering
-    include Endpoint::Device
-    include Endpoint::ContentDirectory
-    include Topology
-
-    attr_reader :ip, :zone_name, :zone_icon, :uid, :serial_number, :software_version, :hardware_version, :mac_address
+module Sonos::Device
+  class Base
+    attr_reader :ip, :name, :uid, :serial_number, :software_version, :hardware_version, :mac_address, :group
 
     def initialize(ip)
       @ip = ip
 
       # Get the speaker's status
-      get_status
+      parse_status(Nokogiri::XML(open("http://#{@ip}:#{Sonos::PORT}/status/zp")))
     end
 
     # URL for giant dump of device information
@@ -25,20 +17,16 @@ module Sonos
       "http://#{self.ip}:#{PORT}/xml/device_description.xml"
     end
 
-  private
+  protected
 
     # Get information about the speaker.
-    def get_status
-      doc = Nokogiri::XML(open("http://#{@ip}:#{PORT}/status/zp"))
-
-      @zone_name = doc.xpath('.//ZoneName').inner_text
-      @zone_icon = doc.xpath('.//ZoneIcon').inner_text
+    def parse_status(doc)
+      @name = doc.xpath('.//ZoneName').inner_text
       @uid = doc.xpath('.//LocalUID').inner_text
       @serial_number = doc.xpath('.//SerialNumber').inner_text
       @software_version = doc.xpath('.//SoftwareVersion').inner_text
       @hardware_version = doc.xpath('.//HardwareVersion').inner_text
       @mac_address = doc.xpath('.//MACAddress').inner_text
-      self
     end
   end
 end
