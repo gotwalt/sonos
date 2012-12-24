@@ -26,7 +26,7 @@ $ gem install sonos
 
 ## Usage
 
-I'm working on a CLI client. For now, we'll use IRB. You will need the IP address of a speaker (auto-detection is on my list too). To get the IP of a speaker, one of your Sonos controllers and go to "About My Sonos System".
+I'm working on a CLI client. For now, we'll use IRB.
 
 ``` shell
 $ gem install sonos
@@ -36,7 +36,8 @@ $ irb
 ``` ruby
 require 'rubygems'
 require 'sonos'
-speaker = Sonos::Speaker('10.0.1.10') # or whatever the IP is
+speakers = Sonos.discover.topology.map(&:speaker)
+speakers = speaker.first
 ```
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
@@ -51,6 +52,7 @@ speaker.volume = 70
 speaker.volume -= 10
 ```
 
+
 ## To Do
 
 * List other speakers
@@ -64,7 +66,6 @@ speaker.volume -= 10
 * Handle errors better
 * Fix album art in `now_playing`
 * Handle line-in in `now_playing`
-* Auto-discovery
 * Better support for stero pairs
 * CLI client
 
