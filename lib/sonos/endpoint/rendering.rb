@@ -58,6 +58,19 @@ module Sonos::Endpoint::Rendering
     response.body[:get_mute_response][:current_mute] == '1'
   end
 
+  # Get the loudness compenstation setting
+  # @return [Boolean] true if the speaker has loudness on and false if it is not
+  def loudness
+    response = send_rendering_message('GetLoudness')
+    response.body[:get_loudness_response][:current_loudness] == '1'
+  end
+
+  # Set the loudness compenstation setting
+  # @param [Boolean] if the speaker has loudness on or not
+  def loudness=(value)
+    send_rendering_message('SetLoudness', value ? 1 : 0)
+  end
+
 private
 
   # Sets the speaker's mute

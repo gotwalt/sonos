@@ -1,5 +1,6 @@
-### Version 0.2.0 - Unreleased
+### Version 0.2.0 — December 24, 2012
 
+* Add Loudness setting
 * Moved `sonos-discover` to `sonos discover`
 * Moved `sonos-discover-multiple` to `sonos discover --all`
 * Cleaned up enpoints

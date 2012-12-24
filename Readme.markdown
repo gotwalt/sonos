@@ -64,19 +64,20 @@ There is a very limited CLI right now. You can run `sonos discover` to get the I
 
 ## To Do
 
+* Refactor all of the things
+* Nonblocking calls with Celluloid::IO
 * List other speakers
 * Loudness
 * Alarm clock
 * Group management
     * Party Mode
     * Join
-* Learn what all of the endpoints in `speaker.device_description_url` do
 * Line-in (I don't have a PLAY:5, so I'll need help testing this one)
 * Handle errors better
 * Fix album art in `now_playing`
 * Handle line-in in `now_playing`
 * Better support for stero pairs
-* CLI client
+* CLI client for everything
 
 ## Contributing
 
