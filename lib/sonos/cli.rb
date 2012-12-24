@@ -4,7 +4,7 @@ require 'sonos'
 module Sonos
   class Cli < Thor
     desc 'discover', 'Finds the IP address of a Sonos device on your network'
-    method_option :all, type: :boolean, aliases: '-a', desc: 'Find all of the IP address instead of the first one discoverd'
+    method_option :all, type: :boolean, aliases: '-a', desc: 'Find all of the IP address instead of the first one discovered'
     def discover
       speaker = Sonos.discover
 
