@@ -2,7 +2,7 @@
 
 Control Sonos speakers with Ruby.
 
-Huge thanks to [Rahim Sonawalla](https://github.com/rahims) for making [SoCo](https://github.com/rahims/SoCo). Control would not be possible without his work.
+Huge thanks to [Rahim Sonawalla](https://github.com/rahims) for making [SoCo](https://github.com/rahims/SoCo). This gem would not be possible without his work.
 
 ## Installation
 
@@ -53,14 +53,12 @@ speaker.volume -= 10
 
 ## To Do
 
-* Mute
 * Bass
 * Treble
 * Loudness
 * Party Mode
 * Join
 * Line-in
-* Status Light
 * Handle errors better
 * Fix album art in `now_playing`
 * Handle line-in in `now_playing`

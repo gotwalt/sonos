@@ -1,14 +1,12 @@
 module Sonos
   module Transport
-    TRANSPORT_ENDPOINT = '/MediaRenderer/AVTransport/Control'.freeze
+    TRANSPORT_ENDPOINT = '/MediaRenderer/AVTransport/Control'
+    TRANSPORT_XMLNS = 'urn:schemas-upnp-org:service:AVTransport:1'
 
-    #
     # Get information about the currently playing track.
-    #
-    def get_position_info
-      action = 'urn:schemas-upnp-org:service:AVTransport:1#GetPositionInfo'
-      message = '<u:GetPositionInfo xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Channel>Master</Channel></u:GetPositionInfo>'
-      response = transport_client.call(:get_position_info, soap_action: action, message: message)
+    # @return [Hash] information about the current track.
+    def now_playing
+      response = send_transport_message('GetPositionInfo')
       body = response.body[:get_position_info_response]
       doc = Nokogiri::XML(body[:track_meta_data])
 
@@ -20,75 +18,59 @@ module Sonos
         track_duration: body[:track_duration],
         current_position: body[:rel_time],
         uri: body[:track_uri],
-        album_art: "http://#{@ip}:#{PORT}#{doc.xpath('//upnp:albumArtURI').inner_text}"
+        album_art: "http://#{self.ip}:#{PORT}#{doc.xpath('//upnp:albumArtURI').inner_text}"
       }
     end
-    alias_method :now_playing, :get_position_info
 
-    #
     # Pause the currently playing track.
-    #
     def pause
-      send_transport_message :pause
+      send_transport_message('Pause')
     end
 
-    #
     # Play the currently selected track or play a stream.
-    #
+    # @param [String] optional uri of the track to play. Leaving this blank, plays the current track.
     def play(uri = nil)
       # Play a song from the uri
-      if uri
-        self.set_av_transport_uri(uri)
-        return
-      end
+      set_av_transport_uri(uri) and return if uri
 
       # Play the currently selected track
-      send_transport_message :play
+      send_transport_message('Play')
     end
 
-    #
-    # Play a stream.
-    #
-    def set_av_transport_uri(uri)
-      action = 'urn:schemas-upnp-org:service:AVTransport:1#SetAVTransportURI'
-      message = %Q{<u:SetAVTransportURI xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><CurrentURI>#{uri}</CurrentURI><CurrentURIMetaData></CurrentURIMetaData></u:SetAVTransportURI>}
-      transport_client.call(:set_av_transport_uri, soap_action: action, message: message)
-      self.play
-    end
-    alias_method :play_stream, :set_av_transport_uri
-
-    #
     # Stop playing.
-    #
     def stop
-      send_transport_message :stop
+      send_transport_message('Stop')
     end
 
-    #
     # Play the next track.
-    #
     def next
-      send_transport_message :next
+      send_transport_message('Next')
     end
 
-    #
     # Play the previous track.
-    #
     def previous
-      send_transport_message :previous
+      send_transport_message('Previous')
     end
 
   private
+
+    # Play a stream.
+    def set_av_transport_uri(uri)
+      name = 'SetAVTransportURI'
+      action = "#{TRANSPORT_XMLNS}##{name}"
+      message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID><CurrentURI>#{uri}</CurrentURI><CurrentURIMetaData></CurrentURIMetaData></u:#{name}>}
+      transport_client.call(name, soap_action: action, message: message)
+      self.play
+    end
 
     def transport_client
       @transport_client ||= Savon.client endpoint: "http://#{self.ip}:#{PORT}#{TRANSPORT_ENDPOINT}", namespace: NAMESPACE
     end
 
-    def send_transport_message(sym)
-      name = sym.to_s.split('_').map{|e| e.capitalize}.join
-      action = "urn:schemas-upnp-org:service:AVTransport:1##{name}"
-      message = %Q{<u:#{name} xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"><InstanceID>0</InstanceID><Speed>1</Speed></u:#{name}>}
-      transport_client.call(sym, soap_action: action, message: message)
+    def send_transport_message(name)
+      action = "#{TRANSPORT_XMLNS}##{name}"
+      message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID><Speed>1</Speed></u:#{name}>}
+      transport_client.call(name, soap_action: action, message: message)
     end
   end
 end
