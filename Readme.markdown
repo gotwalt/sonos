@@ -39,16 +39,6 @@ require 'sonos'
 ip = Sonos.discover
 speaker = Sonos::Speaker(ip)
 ```
-Finding multiple devices is done synchronously:
-
-``` ruby
-require 'rubygems'
-require 'sonos'
-Sonos.discover_multiple.map do |ip|
-  Sonos::Speaker.new(ip)
-end
-```
-
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
 
@@ -62,6 +52,16 @@ speaker.volume = 70
 speaker.volume -= 10
 ```
 
+Finding multiple devices can be done synchronously:
+
+``` ruby
+require 'rubygems'
+require 'sonos'
+Sonos.discover_multiple.map do |ip|
+  Sonos::Speaker.new(ip)
+end
+```
+
 ## To Do
 
 * Loudness
@@ -71,7 +71,6 @@ speaker.volume -= 10
 * Handle errors better
 * Fix album art in `now_playing`
 * Handle line-in in `now_playing`
-* Auto-discovery
 * Better support for stero pairs
 * CLI client
 
