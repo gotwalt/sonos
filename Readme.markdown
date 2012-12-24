@@ -64,10 +64,14 @@ end
 
 ## To Do
 
+* List other speakers
 * Loudness
-* Party Mode
-* Join
-* Line-in
+* Alarm clock
+* Group management
+    * Party Mode
+    * Join
+* Learn what all of the endpoints in `speaker.device_description_url` do
+* Line-in (I don't have a PLAY:5, so I'll need help testing this one)
 * Handle errors better
 * Fix album art in `now_playing`
 * Handle line-in in `now_playing`

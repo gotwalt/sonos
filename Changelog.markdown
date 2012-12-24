@@ -1,3 +1,10 @@
+### Version 0.1.1 — December 24, 2012
+
+* **Feature:** Queue
+* **Feature:** Clear Queue
+* **Feature:** Save Queue
+* **Feature:** Device Description URL
+
 ### Version 0.1.0 — December 24, 2012
 
 * **Feature:** Stop

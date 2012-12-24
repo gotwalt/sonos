@@ -52,6 +52,19 @@ module Sonos
       send_transport_message('Previous')
     end
 
+    # Clear the queue
+    def clear_queue
+      send_transport_message('RemoveAllTracksFromQueue')
+    end
+
+    # Save queue
+    def save_queue(title)
+      name = 'SaveQueue'
+      action = "#{TRANSPORT_XMLNS}##{name}"
+      message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID><Title>#{title}</Title><ObjectID></ObjectID></u:#{name}>}
+      transport_client.call(name, soap_action: action, message: message)
+    end
+
   private
 
     # Play a stream.

@@ -1,14 +1,16 @@
 require 'savon'
+require 'open-uri'
 require 'sonos/transport'
 require 'sonos/rendering'
 require 'sonos/device'
-require 'open-uri'
+require 'sonos/content_directory'
 
 module Sonos
   class Speaker
     include Transport
     include Rendering
     include Device
+    include ContentDirectory
 
     attr_reader :ip, :zone_name, :zone_icon, :uid, :serial_number, :software_version, :hardware_version, :mac_address
 
@@ -17,6 +19,11 @@ module Sonos
 
       # Get the speaker's status
       get_status
+    end
+
+    # URL for giant dump of device information
+    def device_description_url
+      "http://#{self.ip}:#{PORT}/xml/device_description.xml"
     end
 
   private
