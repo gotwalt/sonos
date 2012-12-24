@@ -32,7 +32,7 @@ module Sonos
 
     # Get information about the speaker.
     def get_status
-      doc = Nokogiri::XML(open("http://#{@ip}:1400/status/zp"))
+      doc = Nokogiri::XML(open("http://#{@ip}:#{PORT}/status/zp"))
 
       @zone_name = doc.xpath('.//ZoneName').inner_text
       @zone_icon = doc.xpath('.//ZoneIcon').inner_text

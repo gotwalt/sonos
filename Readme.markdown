@@ -36,8 +36,8 @@ $ irb
 ``` ruby
 require 'rubygems'
 require 'sonos'
-ip = Sonos.discover
-speaker = Sonos::Speaker(ip)
+speakers = Sonos.discover.topology.map(&:speaker)
+speakers = speaker.first
 ```
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
@@ -52,15 +52,6 @@ speaker.volume = 70
 speaker.volume -= 10
 ```
 
-Finding multiple devices can be done synchronously:
-
-``` ruby
-require 'rubygems'
-require 'sonos'
-Sonos.discover_multiple.map do |ip|
-  Sonos::Speaker.new(ip)
-end
-```
 
 ## To Do
 

@@ -4,7 +4,7 @@ module Sonos
   module Topology
 
     def topology
-      doc = Nokogiri::XML(open("http://#{@ip}:1400/status/topology"))
+      doc = Nokogiri::XML(open("http://#{@ip}:#{PORT}/status/topology"))
 
       doc.xpath('//ZonePlayers/ZonePlayer').map do |node|
         Node.new(node)
@@ -26,6 +26,10 @@ module Sonos
 
       def ip
         @ip ||= URI.parse(location).host
+      end
+
+      def speaker
+        @speaker || Sonos::Speaker.new(ip)
       end
     end
   end
