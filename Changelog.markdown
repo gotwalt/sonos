@@ -1,4 +1,4 @@
-### Version 0.1.1 — Unreleased
+### Version 0.1.1 — December 24, 2012
 
 * **Feature:** Queue
 * **Feature:** Clear Queue
