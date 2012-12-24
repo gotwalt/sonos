@@ -26,7 +26,7 @@ $ gem install sonos
 
 ## Usage
 
-I'm working on a CLI client. For now, we'll use IRB. You will need the IP address of a speaker (auto-detection is on my list too). To get the IP of a speaker, one of your Sonos controllers and go to "About My Sonos System".
+I'm working on a CLI client. For now, we'll use IRB.
 
 ``` shell
 $ gem install sonos
@@ -36,8 +36,19 @@ $ irb
 ``` ruby
 require 'rubygems'
 require 'sonos'
-speaker = Sonos::Speaker('10.0.1.10') # or whatever the IP is
+ip = Sonos.discover
+speaker = Sonos::Speaker(ip)
 ```
+Finding multiple devices is done synchronously:
+
+``` ruby
+require 'rubygems'
+require 'sonos'
+Sonos.discover_multiple.map do |ip|
+  Sonos::Speaker.new(ip)
+end
+```
+
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
 
