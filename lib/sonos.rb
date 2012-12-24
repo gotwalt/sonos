@@ -14,7 +14,7 @@ module Sonos
     Sonos::Discovery.new.discover
   end
 
-  def self.discover_multiple
-    Sonos::Discovery.new.discover_multiple
+  def self.discover_multiple(timeout = nil)
+    Sonos::Discovery.new.discover_multiple(timeout)
   end
 end

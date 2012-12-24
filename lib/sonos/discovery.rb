@@ -23,18 +23,20 @@ ST: urn:schemas-upnp-org:device:ZonePlayer:1"
     MULTICAST_ADDR = "239.255.255.250"
     MULTICAST_PORT = 1900
 
+    SEARCH_TIMEOUT = 1
+
     def initialize
       initialize_socket
     end
 
-    def discover(timeout = 10)
+    def discover(timeout = nil)
       send_discovery_message
-      listen_for_responses(timeout)
+      listen_for_responses( timeout ||= SEARCH_TIMEOUT)
     end
 
-    def discover_multiple(timeout = 10)
+    def discover_multiple(timeout = nil)
       send_discovery_message
-      listen_for_multiple_responses(timeout)
+      listen_for_multiple_responses( timeout ||= SEARCH_TIMEOUT)
     end
 
     def send_discovery_message
