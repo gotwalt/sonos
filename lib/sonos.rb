@@ -1,5 +1,6 @@
 require 'sonos/version'
 require 'sonos/speaker'
+require 'sonos/discovery'
 
 module Sonos
   PORT = 1400
@@ -7,5 +8,9 @@ module Sonos
 
   def self.Speaker(ip)
     Speaker.new(ip)
+  end
+
+  def self.discover
+    Sonos::Discovery.new.discover
   end
 end

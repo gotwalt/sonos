@@ -1,8 +1,10 @@
 require 'savon'
+require 'open-uri'
 require 'sonos/transport'
 require 'sonos/rendering'
 require 'sonos/device'
 require 'sonos/content_directory'
+require 'sonos/topology'
 
 module Sonos
   class Speaker
@@ -10,6 +12,7 @@ module Sonos
     include Rendering
     include Device
     include ContentDirectory
+    include Topology
 
     attr_reader :ip, :zone_name, :zone_icon, :uid, :serial_number, :software_version, :hardware_version, :mac_address
 
@@ -29,7 +32,7 @@ module Sonos
 
     # Get information about the speaker.
     def get_status
-      doc = Nokogiri::XML(open("http://#{@ip}:1400/status/zp"))
+      doc = Nokogiri::XML(open("http://#{@ip}:#{PORT}/status/zp"))
 
       @zone_name = doc.xpath('.//ZoneName').inner_text
       @zone_icon = doc.xpath('.//ZoneIcon').inner_text
