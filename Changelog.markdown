@@ -1,5 +1,6 @@
 ### Version 0.1.1 — Unreleased
 
+* **Feature:** Queue
 * **Feature:** Clear Queue
 * **Feature:** Save Queue
 * **Feature:** Device Description URL

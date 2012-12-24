@@ -2,12 +2,14 @@ require 'savon'
 require 'sonos/transport'
 require 'sonos/rendering'
 require 'sonos/device'
+require 'sonos/content_directory'
 
 module Sonos
   class Speaker
     include Transport
     include Rendering
     include Device
+    include ContentDirectory
 
     attr_reader :ip, :zone_name, :zone_icon, :uid, :serial_number, :software_version, :hardware_version, :mac_address
 
