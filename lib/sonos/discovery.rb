@@ -27,11 +27,19 @@ module Sonos
 
     def discover
       send_discovery_message
-      result = listen_for_responses
-      Sonos::Device::Speaker.new(result) if result
+      first_device_ip = listen_for_responses
+      discover_topology(first_device_ip)
     end
 
   private
+
+    def discover_topology(ip_address)
+      doc = Nokogiri::XML(open("http://#{ip_address}:#{Sonos::Device::Base::PORT}/status/topology"))
+
+      doc.xpath('//ZonePlayers/ZonePlayer').map do |node|
+        TopologyNode.new(node).device
+      end
+    end
 
     def send_discovery_message
       # Request announcements
@@ -68,6 +76,26 @@ module Sonos
         "MX: #{timeout}",
         "ST: urn:schemas-upnp-org:device:ZonePlayer:1"
       ].join("\n")
+    end
+
+    class TopologyNode
+      attr_accessor :name, :group, :coordinator, :location, :version, :uuid
+
+      def initialize(node)
+        node.attributes.each do |k, v|
+          self.send("#{k}=", v) if self.respond_to?(k.to_sym)
+        end
+
+        self.name = node.inner_text
+      end
+
+      def ip
+        @ip ||= URI.parse(location).host
+      end
+
+      def device
+        @device || Sonos::Device::Base.detect(ip)
+      end
     end
   end
 end

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:schemas-upnp-org:device:ZonePlayer:1</deviceType>
+    <friendlyName>192.168.1.95 - Sonos PLAY:3</friendlyName>
+    <manufacturer>Sonos, Inc.</manufacturer>
+    <manufacturerURL>http://www.sonos.com</manufacturerURL>
+    <modelNumber>S3</modelNumber>
+    <modelDescription>Sonos PLAY:3</modelDescription>
+    <modelName>Sonos PLAY:3</modelName>
+    <modelURL>http://www.sonos.com/products/zoneplayers/S3</modelURL>
+    <softwareVersion>19.4-60120</softwareVersion>
+    <hardwareVersion>1.8.1.2-1</hardwareVersion>
+    <serialNum>00-0E-58-72-18-B2:D</serialNum>
+    <UDN>uuid:RINCON_000E587218B201400</UDN>
+    <iconList>
+      <icon>
+        <id>0</id>
+        <mimetype>image/png</mimetype>
+        <width>48</width>
+        <height>48</height>
+        <depth>24</depth>
+        <url>/img/icon-S3.png</url>
+      </icon>
+    </iconList>
+    <minCompatibleVersion>19.4-00000</minCompatibleVersion>
+    <displayVersion>3.8.4</displayVersion>
+    <extraVersion>OTP: </extraVersion>
+    <roomName>Office</roomName>
+    <displayName>PLAY:3</displayName>
+    <zoneType>7</zoneType>
+    <feature1>0x00000000</feature1>
+    <feature2>0x00006332</feature2>
+    <feature3>0x0000002a</feature3>
+    <internalSpeakerSize>4</internalSpeakerSize>
+    <serviceList>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:AlarmClock:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:AlarmClock</serviceId>
+        <controlURL>/AlarmClock/Control</controlURL>
+        <eventSubURL>/AlarmClock/Event</eventSubURL>
+        <SCPDURL>/xml/AlarmClock1.xml</SCPDURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:MusicServices:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:MusicServices</serviceId>
+        <controlURL>/MusicServices/Control</controlURL>
+        <eventSubURL>/MusicServices/Event</eventSubURL>
+        <SCPDURL>/xml/MusicServices1.xml</SCPDURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:DeviceProperties:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:DeviceProperties</serviceId>
+        <controlURL>/DeviceProperties/Control</controlURL>
+        <eventSubURL>/DeviceProperties/Event</eventSubURL>
+        <SCPDURL>/xml/DeviceProperties1.xml</SCPDURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:SystemProperties:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:SystemProperties</serviceId>
+        <controlURL>/SystemProperties/Control</controlURL>
+        <eventSubURL>/SystemProperties/Event</eventSubURL>
+        <SCPDURL>/xml/SystemProperties1.xml</SCPDURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ZoneGroupTopology:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:ZoneGroupTopology</serviceId>
+        <controlURL>/ZoneGroupTopology/Control</controlURL>
+        <eventSubURL>/ZoneGroupTopology/Event</eventSubURL>
+        <SCPDURL>/xml/ZoneGroupTopology1.xml</SCPDURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:GroupManagement:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:GroupManagement</serviceId>
+        <controlURL>/GroupManagement/Control</controlURL>
+        <eventSubURL>/GroupManagement/Event</eventSubURL>
+        <SCPDURL>/xml/GroupManagement1.xml</SCPDURL>
+      </service>
+    </serviceList>
+    <deviceList>
+      <device>
+  <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+  <friendlyName>192.168.1.95 - Sonos PLAY:3 Media Server</friendlyName>
+  <manufacturer>Sonos, Inc.</manufacturer>
+  <manufacturerURL>http://www.sonos.com</manufacturerURL>
+  <modelNumber>S3</modelNumber>
+  <modelDescription>Sonos PLAY:3 Media Server</modelDescription>
+  <modelName>Sonos PLAY:3</modelName>
+  <modelURL>http://www.sonos.com/products/zoneplayers/S3</modelURL>
+  <UDN>uuid:RINCON_000E587218B201400_MS</UDN>
+  <serviceList>
+    <service>
+      <serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
+      <serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId>
+      <controlURL>/MediaServer/ContentDirectory/Control</controlURL>
+      <eventSubURL>/MediaServer/ContentDirectory/Event</eventSubURL>
+      <SCPDURL>/xml/ContentDirectory1.xml</SCPDURL>
+    </service>
+    <service>
+      <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+      <serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+      <controlURL>/MediaServer/ConnectionManager/Control</controlURL>
+      <eventSubURL>/MediaServer/ConnectionManager/Event</eventSubURL>
+      <SCPDURL>/xml/ConnectionManager1.xml</SCPDURL>
+    </service>
+  </serviceList>
+      </device>
+      <device>
+  <deviceType>urn:schemas-upnp-org:device:MediaRenderer:1</deviceType>
+  <friendlyName>Office - Sonos PLAY:3 Media Renderer</friendlyName>
+  <manufacturer>Sonos, Inc.</manufacturer>
+  <manufacturerURL>http://www.sonos.com</manufacturerURL>
+  <modelNumber>S3</modelNumber>
+  <modelDescription>Sonos PLAY:3 Media Renderer</modelDescription>
+  <modelName>Sonos PLAY:3</modelName>
+  <modelURL>http://www.sonos.com/products/zoneplayers/S3</modelURL>
+  <UDN>uuid:RINCON_000E587218B201400_MR</UDN>
+  <serviceList>
+    <service>
+      <serviceType>urn:schemas-upnp-org:service:RenderingControl:1</serviceType>
+      <serviceId>urn:upnp-org:serviceId:RenderingControl</serviceId>
+      <controlURL>/MediaRenderer/RenderingControl/Control</controlURL>
+      <eventSubURL>/MediaRenderer/RenderingControl/Event</eventSubURL>
+      <SCPDURL>/xml/RenderingControl1.xml</SCPDURL>
+    </service>
+    <service>
+      <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+      <serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+      <controlURL>/MediaRenderer/ConnectionManager/Control</controlURL>
+      <eventSubURL>/MediaRenderer/ConnectionManager/Event</eventSubURL>
+      <SCPDURL>/xml/ConnectionManager1.xml</SCPDURL>
+    </service>
+    <service>
+      <serviceType>urn:schemas-upnp-org:service:AVTransport:1</serviceType>
+      <serviceId>urn:upnp-org:serviceId:AVTransport</serviceId>
+      <controlURL>/MediaRenderer/AVTransport/Control</controlURL>
+      <eventSubURL>/MediaRenderer/AVTransport/Event</eventSubURL>
+      <SCPDURL>/xml/AVTransport1.xml</SCPDURL>
+    </service>
+  </serviceList>
+        <X_Rhapsody-Extension xmlns="http://www.real.com/rhapsody/xmlns/upnp-1-0">
+          <deviceID>urn:rhapsody-real-com:device-id-1-0:sonos_1:RINCON_000E587218B201400</deviceID>
+            <deviceCapabilities>
+              <interactionPattern type="real-rhapsody-upnp-1-0"/>
+            </deviceCapabilities>
+        </X_Rhapsody-Extension>
+        <iconList>
+          <icon>
+            <mimetype>image/png</mimetype>
+            <width>48</width>
+            <height>48</height>
+            <depth>24</depth>
+            <url>/img/icon-S3.png</url>
+          </icon>
+        </iconList>
+      </device>
+    </deviceList>
+  </device>
+</root>

@@ -7,5 +7,9 @@ module Sonos
         group.pause
       end
     end
+
+    def self.discover
+      Sonos::Discovery.new.discover
+    end
   end
 end

@@ -9,13 +9,12 @@ module Sonos::Device
     include Sonos::Endpoint::Device
     include Sonos::Endpoint::ContentDirectory
 
+    MODEL_NUMBERS = ['S3', 'S5', 'ZP90'].freeze
+
     attr_reader :icon
 
-  protected
-
-    def parse_status(doc)
-      super
-      @icon = doc.xpath('.//ZoneIcon').inner_text
+    def self.model_numbers
+      MODEL_NUMBERS
     end
   end
 end
