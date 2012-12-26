@@ -1,11 +1,12 @@
 require 'savon'
 require 'sonos/endpoint'
 
-# Used for Zone Bridge
 module Sonos::Device
+
+  # Used for Zone Bridge
   class Bridge < Base
 
-    MODEL_NUMBERS = ['ZB100'].freeze
+    MODEL_NUMBERS = ['ZB100']
 
     attr_reader :icon
 
