@@ -6,4 +6,4 @@ end
 require 'sonos/endpoint/content_directory'
 require 'sonos/endpoint/device'
 require 'sonos/endpoint/rendering'
-require 'sonos/endpoint/transport'
+require 'sonos/endpoint/a_v_transport'

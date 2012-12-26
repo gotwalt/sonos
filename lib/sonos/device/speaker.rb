@@ -5,7 +5,7 @@ module Sonos::Device
 
   # Used for PLAY:3, PLAY:5, and CONNECT
   class Speaker < Base
-    include Sonos::Endpoint::Transport
+    include Sonos::Endpoint::AVTransport
     include Sonos::Endpoint::Rendering
     include Sonos::Endpoint::Device
     include Sonos::Endpoint::ContentDirectory

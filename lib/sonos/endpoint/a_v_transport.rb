@@ -1,6 +1,6 @@
 require 'uri'
 
-module Sonos::Endpoint::Transport
+module Sonos::Endpoint::AVTransport
   TRANSPORT_ENDPOINT = '/MediaRenderer/AVTransport/Control'
   TRANSPORT_XMLNS = 'urn:schemas-upnp-org:service:AVTransport:1'
 
@@ -71,6 +71,21 @@ module Sonos::Endpoint::Transport
     transport_client.call(name, soap_action: action, message: message)
   end
 
+  # Join another speaker's group
+  def join(master)
+    set_av_transport_uri('x-rincon:' + master.uid.sub('uuid:', ''))
+  end
+
+  # Add another speaker to this group
+  def group(slave)
+    slave.join(self)
+  end
+
+  # Ungroup from its current group
+  def ungroup
+    send_transport_message('BecomeCoordinatorOfStandaloneGroup')
+  end
+
 private
 
   # Play a stream.
@@ -79,7 +94,6 @@ private
     action = "#{TRANSPORT_XMLNS}##{name}"
     message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID><CurrentURI>#{uri}</CurrentURI><CurrentURIMetaData></CurrentURIMetaData></u:#{name}>}
     transport_client.call(name, soap_action: action, message: message)
-    self.play
   end
 
   def transport_client

@@ -4,33 +4,56 @@ require 'nokogiri'
 module Sonos::Device
   class Base
     attr_reader :ip, :name, :uid, :serial_number, :software_version, :hardware_version, :mac_address, :group
-    attr_accessor :data
-
-    PORT = 1400
 
     def initialize(ip, data = nil)
       @ip = ip
-      @data = data
+
       if data.nil?
         self.data = Base.retrieve_information(ip)
+      else
+        self.data = data
       end
+    end
+
+    def data=(data)
+      @name = data[:name]
+      @uid = data[:uid]
+      @serial_number = data[:serial_number]
+      @software_version = data[:software_version]
+      @hardware_version = data[:hardware_version]
+      @zone_type = data[:zone_type]
+      @model_number = data[:model_number]
+    end
+
+    def data
+      {
+        name: @name,
+        uid: @uid,
+        serial_number: @serial_number,
+        software_version: @software_version,
+        hardware_version: @hardware_version,
+        zone_type: @zone_type,
+        model_number: @model_number
+      }
     end
 
     def self.detect(ip)
       data = retrieve_information(ip)
-      if Bridge.model_numbers.include? data[:model_number]
+      model_number = data[:model_number]
+
+      if Bridge.model_numbers.include?(model_number)
         Bridge.new(ip, data)
-      elsif Speaker.model_numbers.include? data[:model_number]
+      elsif Speaker.model_numbers.include?(model_number)
         Speaker.new(ip, data)
       else
-        raise ArgumentError.new("#{data[:model_number]} not supported")
+        raise ArgumentError.new("#{self.data[:model_number]} not supported")
       end
     end
 
   protected
 
     def self.retrieve_information(ip)
-      url = "http://#{ip}:#{PORT}/xml/device_description.xml"
+      url = "http://#{ip}:#{Sonos::PORT}/xml/device_description.xml"
       parse_description(Nokogiri::XML(open(url)))
     end
 

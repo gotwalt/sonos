@@ -34,7 +34,7 @@ module Sonos
   private
 
     def discover_topology(ip_address)
-      doc = Nokogiri::XML(open("http://#{ip_address}:#{Sonos::Device::Base::PORT}/status/topology"))
+      doc = Nokogiri::XML(open("http://#{ip_address}:#{Sonos::PORT}/status/topology"))
 
       doc.xpath('//ZonePlayers/ZonePlayer').map do |node|
         TopologyNode.new(node).device

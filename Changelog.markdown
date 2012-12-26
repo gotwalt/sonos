@@ -1,3 +1,7 @@
+### Version 0.2.2 — Unreleased
+
+* Group and ungroup speakers
+
 ### Version 0.2.1 — December 24, 2012
 
 * Fix album art in now playing
