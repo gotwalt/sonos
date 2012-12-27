@@ -4,6 +4,8 @@ Control Sonos speakers with Ruby.
 
 Huge thanks to [Rahim Sonawalla](https://github.com/rahims) for making [SoCo](https://github.com/rahims/SoCo). This gem would not be possible without his work.
 
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/soffes/sonos)
+
 ## Installation
 
 Add this line to your application's Gemfile:
