@@ -5,6 +5,19 @@ module Sonos::Device
   class Base
     attr_reader :ip, :name, :uid, :serial_number, :software_version, :hardware_version, :mac_address, :group
 
+    def self.detect(ip)
+      data = retrieve_information(ip)
+      model_number = data[:model_number]
+
+      if Bridge.model_numbers.include?(model_number)
+        Bridge.new(ip, data)
+      elsif Speaker.model_numbers.include?(model_number)
+        Speaker.new(ip, data)
+      else
+        raise ArgumentError.new("#{self.data[:model_number]} not supported")
+      end
+    end
+
     def initialize(ip, data = nil)
       @ip = ip
 
@@ -37,17 +50,10 @@ module Sonos::Device
       }
     end
 
-    def self.detect(ip)
-      data = retrieve_information(ip)
-      model_number = data[:model_number]
-
-      if Bridge.model_numbers.include?(model_number)
-        Bridge.new(ip, data)
-      elsif Speaker.model_numbers.include?(model_number)
-        Speaker.new(ip, data)
-      else
-        raise ArgumentError.new("#{self.data[:model_number]} not supported")
-      end
+    # Can this device play music?
+    # @return [Boolean] a boolean indicating if it can play music
+    def speaker?
+      false
     end
 
   protected

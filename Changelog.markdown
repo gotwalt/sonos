@@ -1,6 +1,8 @@
-### Version 0.2.2 — Unreleased
+### Version 0.3.0 — Unreleased
 
+* System owns groups that reflect the topology
 * Group and ungroup speakers
+* Rename `playlist_position` to `queue_position` for consistency
 
 ### Version 0.2.1 — December 24, 2012
 

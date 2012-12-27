@@ -20,7 +20,7 @@ module Sonos::Endpoint::AVTransport
       title: doc.xpath('//dc:title').inner_text,
       artist: doc.xpath('//dc:creator').inner_text,
       album: doc.xpath('//upnp:album').inner_text,
-      playlist_position: body[:track],
+      queue_position: body[:track],
       track_duration: body[:track_duration],
       current_position: body[:rel_time],
       uri: body[:track_uri],
@@ -71,17 +71,20 @@ module Sonos::Endpoint::AVTransport
     transport_client.call(name, soap_action: action, message: message)
   end
 
-  # Join another speaker's group
+  # Join another speaker's group.
+  # Trying to call this on a stereo pair slave will fail.
   def join(master)
     set_av_transport_uri('x-rincon:' + master.uid.sub('uuid:', ''))
   end
 
-  # Add another speaker to this group
+  # Add another speaker to this group.
+  # Trying to call this on a stereo pair slave will fail.
   def group(slave)
     slave.join(self)
   end
 
-  # Ungroup from its current group
+  # Ungroup from its current group.
+  # Trying to call this on a stereo pair slave will fail.
   def ungroup
     send_transport_message('BecomeCoordinatorOfStandaloneGroup')
   end

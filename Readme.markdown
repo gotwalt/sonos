@@ -36,7 +36,7 @@ $ irb
 ``` ruby
 require 'rubygems'
 require 'sonos'
-speaker = Sonos.discover
+speaker = Sonos.system.speakers.first
 ```
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
@@ -56,7 +56,9 @@ speaker.clear_queue
 
 ### Topology
 
-`Sonos.discover` finds the first speaker it can. We can get all of the Sonos devices (including Bridges, etc) by calling `speaker.topology`. This is going to get refactored a bit. Right now everything is nested under speaker which is kinda messy and confusing.
+`Sonos.discover` finds the first speaker it can. We can get all of the Sonos devices (including Bridges, etc) by calling `Sonos.system.devices`. To get the groups, call `Sonos.system.groups`.
+
+All of this is based off of the raw `Sonos.system.topology`.
 
 ### CLI
 
@@ -71,7 +73,8 @@ There is a very limited CLI right now. You can run `sonos discover` to get the I
 * List other speakers
 * Handle errors better
 * Handle line-in in `now_playing`
-* Better support for stero pairs
+* Detect fixed volume
+* Detect stereo pair
 * CLI client for everything
 
 ### Features

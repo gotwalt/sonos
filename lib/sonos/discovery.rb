@@ -1,6 +1,7 @@
 require 'socket'
 require 'ipaddr'
 require 'timeout'
+require 'sonos/topology_node'
 
 #
 # Inspired by https://github.com/rahims/SoCo, https://github.com/turboladen/upnp,
@@ -18,28 +19,32 @@ module Sonos
     DEFAULT_TIMEOUT = 1
 
     attr_reader :timeout
+    attr_reader :first_device_ip
 
-    def initialize(timeout = nil)
-      @timeout = timeout || DEFAULT_TIMEOUT
-
+    def initialize(timeout = DEFAULT_TIMEOUT)
+      @timeout = timeout
       initialize_socket
     end
 
+    # Look for Sonos devices on the network and return the first IP address found
+    # @return [String] the IP address of the first Sonos device found
     def discover
       send_discovery_message
-      first_device_ip = listen_for_responses
-      discover_topology(first_device_ip)
+      @first_device_ip = listen_for_responses
+    end
+
+    # Find all of the Sonos devices on the network
+    # @return [Array] an array of TopologyNode objects
+    def topology
+      self.discover unless @first_device_ip
+
+      doc = Nokogiri::XML(open("http://#{@first_device_ip}:#{Sonos::PORT}/status/topology"))
+      doc.xpath('//ZonePlayers/ZonePlayer').map do |node|
+        TopologyNode.new(node)
+      end
     end
 
   private
-
-    def discover_topology(ip_address)
-      doc = Nokogiri::XML(open("http://#{ip_address}:#{Sonos::PORT}/status/topology"))
-
-      doc.xpath('//ZonePlayers/ZonePlayer').map do |node|
-        TopologyNode.new(node).device
-      end
-    end
 
     def send_discovery_message
       # Request announcements
@@ -76,26 +81,6 @@ module Sonos
         "MX: #{timeout}",
         "ST: urn:schemas-upnp-org:device:ZonePlayer:1"
       ].join("\n")
-    end
-
-    class TopologyNode
-      attr_accessor :name, :group, :coordinator, :location, :version, :uuid
-
-      def initialize(node)
-        node.attributes.each do |k, v|
-          self.send("#{k}=", v) if self.respond_to?(k.to_sym)
-        end
-
-        self.name = node.inner_text
-      end
-
-      def ip
-        @ip ||= URI.parse(location).host
-      end
-
-      def device
-        @device || Sonos::Device::Base.detect(ip)
-      end
     end
   end
 end

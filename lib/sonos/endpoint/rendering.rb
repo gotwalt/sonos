@@ -3,6 +3,7 @@ module Sonos::Endpoint::Rendering
   RENDERING_XMLNS = 'urn:schemas-upnp-org:service:RenderingControl:1'
 
   # Get the current volume.
+  # Fixed volume speakers will always return 100.
   # @return [Fixnum] the volume from 0 to 100
   def volume
     response = send_rendering_message('GetVolume')
@@ -10,6 +11,7 @@ module Sonos::Endpoint::Rendering
   end
 
   # Set the volume from 0 to 100.
+  # Trying to set the volume of a fixed volume speaker will fail.
   # @param [Fixnum] the desired volume from 0 to 100
   def volume=(value)
     send_rendering_message('SetVolume', value)

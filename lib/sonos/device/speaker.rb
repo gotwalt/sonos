@@ -17,5 +17,9 @@ module Sonos::Device
     def self.model_numbers
       MODEL_NUMBERS
     end
+
+    def speaker?
+      true
+    end
   end
 end
