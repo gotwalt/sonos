@@ -65,10 +65,7 @@ module Sonos::Endpoint::AVTransport
 
   # Save queue
   def save_queue(title)
-    name = 'SaveQueue'
-    action = "#{TRANSPORT_XMLNS}##{name}"
-    message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID><Title>#{title}</Title><ObjectID></ObjectID></u:#{name}>}
-    transport_client.call(name, soap_action: action, message: message)
+    send_transport_message('SaveQueue', "<Title>#{title}</Title><ObjectID></ObjectID>")
   end
 
   # Join another speaker's group.
@@ -93,19 +90,16 @@ private
 
   # Play a stream.
   def set_av_transport_uri(uri)
-    name = 'SetAVTransportURI'
-    action = "#{TRANSPORT_XMLNS}##{name}"
-    message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID><CurrentURI>#{uri}</CurrentURI><CurrentURIMetaData></CurrentURIMetaData></u:#{name}>}
-    transport_client.call(name, soap_action: action, message: message)
+    send_transport_message('SetAVTransportURI', "<CurrentURI>#{uri}</CurrentURI><CurrentURIMetaData></CurrentURIMetaData>")
   end
 
   def transport_client
     @transport_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE
   end
 
-  def send_transport_message(name)
+  def send_transport_message(name, part = '<Speed>1</Speed>')
     action = "#{TRANSPORT_XMLNS}##{name}"
-    message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID><Speed>1</Speed></u:#{name}>}
+    message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID>#{part}</u:#{name}>}
     transport_client.call(name, soap_action: action, message: message)
   end
 end
