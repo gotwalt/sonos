@@ -70,22 +70,19 @@ There is a very limited CLI right now. You can run `sonos discover` to get the I
 
 ### General
 
-* Refactor all of the things
-* Nonblocking calls with Celluloid::IO
 * List other speakers
 * Handle errors better
 * Handle line-in in `now_playing`
 * Detect fixed volume
 * Detect stereo pair
 * CLI client for everything
+* Nonblocking calls with Celluloid::IO
 
 ### Features
 
-* Alarm clock
+* Manipulating groups doesn't update `System#groups`
 * Pause all (there is no play all in the controller, we could loop through and do it though)
-* Group management
-    * Party Mode
-    * Join
+* Party Mode
 * Line-in
 * Toggle cross fade
 * Toggle shuffle
@@ -95,6 +92,7 @@ There is a very limited CLI right now. You can run `sonos discover` to get the I
 * Browse music library
 * Add songs to queue
 * Skip to song in queue
+* Alarm clock
 * Sleep timer
 
 ### Maybe
@@ -103,14 +101,16 @@ If we are implementing everything the official Sonos Controller does, here's som
 
 * Set zone name and icon
 * Create stero pair
-* Support for BRIDGE
+* Support for SUB
 * Support for DOCK
+* Support for CONNECT:AMP (not sure if this is any different from CONNECT)
 * Manage services
 * Date and time
 * Wireless channel
 * Audio compression
 * Automatically check for updates (not sure if this is a controller only preference)
 * Local music servers
+* Add component
 
 ## Contributing
 
