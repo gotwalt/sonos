@@ -70,7 +70,6 @@ There is a very limited CLI right now. You can run `sonos discover` to get the I
 
 ### General
 
-* List other speakers
 * Handle errors better
 * Handle line-in in `now_playing`
 * Detect fixed volume
