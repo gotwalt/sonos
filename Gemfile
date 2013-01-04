@@ -13,4 +13,5 @@ group :test do
   gem 'minitest-wscolor'
   gem 'fakeweb'
   gem 'vcr'
+  gem 'mocha', require: false
 end
