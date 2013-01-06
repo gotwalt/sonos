@@ -86,7 +86,6 @@ There is a very limited CLI right now. You can run `sonos discover` to get the I
 * Toggle cross fade
 * Toggle shuffle
 * Set repeat mode
-* Scrub
 * Search music library
 * Browse music library
 * Add songs to queue

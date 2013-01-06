@@ -58,6 +58,16 @@ module Sonos::Endpoint::AVTransport
     send_transport_message('Previous')
   end
 
+  # Seeks to a given timestamp in the current track
+  # @param [Fixnum] seconds
+  def seek(seconds = 0)
+    # Must be sent in the format of HH:MM:SS
+    timestamp = Time.at(seconds).utc.strftime('%H:%M:%S')
+
+    send_transport_message('Seek', "<Unit>REL_TIME</Unit><Target>#{timestamp}</Target>")
+
+  end
+
   # Clear the queue
   def clear_queue
     send_transport_message('RemoveAllTracksFromQueue')

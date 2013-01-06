@@ -3,6 +3,7 @@
 * System owns groups that reflect the topology
 * Group and ungroup speakers
 * Rename `playlist_position` to `queue_position` for consistency
+* Add `seek`
 
 ### Version 0.2.1 — December 24, 2012
 
