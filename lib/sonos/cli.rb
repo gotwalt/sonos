@@ -9,5 +9,10 @@ module Sonos
         puts node.inspect
       end
     end
+
+    desc 'pause_all', 'Pauses all Sonos speaker groups'
+    def pause_all
+    	Sonos.system.pause_all
+    end
   end
 end

@@ -66,6 +66,8 @@ All of this is based off of the raw `Sonos.system.topology`.
 
 There is a very limited CLI right now. You can run `sonos discover` to get the IP of one of your devices. Run `sonos discover --all` to get all of them.
 
+You can also run `sonos pause_all` to pause all your Sonos groups.
+
 ## To Do
 
 ### General
