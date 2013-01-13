@@ -94,6 +94,7 @@ You can also run `sonos pause_all` to pause all your Sonos groups.
 * Skip to song in queue
 * Alarm clock
 * Sleep timer
+* Pandora doesn't use the Queue. I bet things are all jacked up.
 
 ### Maybe
 
