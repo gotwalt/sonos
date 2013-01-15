@@ -95,6 +95,11 @@ You can also run `sonos pause_all` to pause all your Sonos groups.
 * Alarm clock
 * Sleep timer
 * Pandora doesn't use the Queue. I bet things are all jacked up.
+* CONNECT (and possibly PLAY:5) line in settings
+    * Source name
+    * Level
+    * Autoplay room
+    * Autoplay include grouped rooms
 
 ### Maybe
 
