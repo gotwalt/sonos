@@ -8,7 +8,7 @@ module Sonos
 
     # Initialize the system
     # @param [Array] the system topology. If this is nil, it will autodiscover.
-    def initialize(topology = Sonos::Discovery.new.topology)
+    def initialize(topology = Discovery.new.topology)
       @topology = topology
       @groups = []
       @devices = @topology.collect(&:device)

@@ -38,7 +38,8 @@ $ irb
 ``` ruby
 require 'rubygems'
 require 'sonos'
-speaker = Sonos.system.speakers.first
+system = Sonos::System.new # Auto-discovers your system
+speaker = system.speakers.first
 ```
 
 Now that we have a reference to the speaker, we can do all kinds of stuff.
@@ -64,7 +65,7 @@ All of this is based off of the raw `Sonos.system.topology`.
 
 ### CLI
 
-There is a very limited CLI right now. You can run `sonos discover` to get the IP of one of your devices. Run `sonos discover --all` to get all of them.
+There is a very limited CLI right now. You can run `sonos devices` to get the IP of all of your devices.
 
 You can also run `sonos pause_all` to pause all your Sonos groups.
 
