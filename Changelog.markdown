@@ -1,4 +1,4 @@
-### Version 0.3.0 — Unreleased
+### Version 0.3.0 — February 2, 2012
 
 * System owns groups that reflect the topology
 * Group and ungroup speakers
