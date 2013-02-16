@@ -40,6 +40,14 @@ module Sonos
       end
     end
 
+    desc 'speaker [name] [command] [args]', 'Control a speaker'
+    def speaker(name, command, *args)
+      speakers = system.speakers.select { |s| s.name == name }
+      puts "Could not find speaker" and return if speakers.length == 0
+
+      speakers.each { |s| s.send command, *args }
+    end
+
   private
 
     def system
