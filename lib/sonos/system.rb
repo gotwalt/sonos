@@ -23,12 +23,27 @@ module Sonos
 
     # Pause all speakers
     def pause_all
-      self.groups.each do |group|
-        group.pause
+      speakers.each do |speaker|
+        speaker.pause if speaker.has_music?
+      end
+    end
+
+    # Play all speakers
+    def play_all
+      speakers.each do |speaker|
+        speaker.play if speaker.has_music?
       end
     end
 
   private
+
+    def send_to_all_speakers(action)
+      if self.groups.length > 0
+        self.groups.each { |group| group.send action }
+      else
+        self.speakers.each { |speaker| speaker.send action }
+      end
+    end
 
     def construct_groups
       # Loop through all of the unique groups
