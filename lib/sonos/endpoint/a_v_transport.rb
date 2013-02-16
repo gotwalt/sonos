@@ -11,6 +11,9 @@ module Sonos::Endpoint::AVTransport
     body = response.body[:get_position_info_response]
     doc = Nokogiri::XML(body[:track_meta_data])
 
+    # No music
+    return nil if doc.children.length == 0
+
     art_path = doc.xpath('//upnp:albumArtURI').inner_text
 
     # TODO: No idea why this is necessary. Maybe its a Nokogiri thing
@@ -26,6 +29,10 @@ module Sonos::Endpoint::AVTransport
       uri: body[:track_uri],
       album_art: "http://#{self.ip}:#{Sonos::PORT}#{art_path}"
     }
+  end
+
+  def has_music?
+    !now_playing.nil?
   end
 
   # Pause the currently playing track.

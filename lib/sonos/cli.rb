@@ -22,6 +22,11 @@ module Sonos
     	system.pause_all
     end
 
+    desc 'play_all', 'Resumes playing all Sonos speaker groups'
+    def play_all
+      system.play_all
+    end
+
     desc 'groups', 'List all Sonos groups'
     def groups
       system.groups.each do |group|
