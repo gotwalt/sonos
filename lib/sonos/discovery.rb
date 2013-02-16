@@ -17,12 +17,15 @@ module Sonos
     MULTICAST_ADDR = '239.255.255.250'
     MULTICAST_PORT = 1900
     DEFAULT_TIMEOUT = 1
+    DEFAULT_IP = nil
 
     attr_reader :timeout
     attr_reader :first_device_ip
+    attr_reader :default_ip
 
-    def initialize(timeout = DEFAULT_TIMEOUT)
+    def initialize(timeout = DEFAULT_TIMEOUT,default_ip = DEFAULT_IP)
       @timeout = timeout
+      @default_ip = default_ip
       initialize_socket
     end
 
@@ -61,7 +64,8 @@ module Sonos
           end
         end
       rescue Timeout::Error => ex
-        nil
+        puts "Timeout error; switching to the default IP"
+        return @default_ip
       end
     end
 
