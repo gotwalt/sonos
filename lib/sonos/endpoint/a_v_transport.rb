@@ -23,6 +23,7 @@ module Sonos::Endpoint::AVTransport
       title: doc.xpath('//dc:title').inner_text,
       artist: doc.xpath('//dc:creator').inner_text,
       album: doc.xpath('//upnp:album').inner_text,
+      info: doc.xpath('//r:streamContent').inner_text,
       queue_position: body[:track],
       track_duration: body[:track_duration],
       current_position: body[:rel_time],
