@@ -42,7 +42,7 @@ module Sonos::Endpoint::AVTransport
   end
 
   # Play the currently selected track or play a stream.
-  # @param [String] optional uri of the track to play. Leaving this blank, plays the current track.
+  # @param [String] uri Optional uri of the track to play. Leaving this blank, plays the current track.
   def play(uri = nil)
     # Play a song from the uri
     set_av_transport_uri(uri) and return if uri
@@ -86,6 +86,24 @@ module Sonos::Endpoint::AVTransport
     send_transport_message('SaveQueue', "<Title>#{title}</Title><ObjectID></ObjectID>")
   end
 
+  # Adds a track to the queue
+  # @param[String] uri Uri of track
+  # @return[Integer] Queue position of the added track
+  def add_to_queue(uri)
+    response = send_transport_message('AddURIToQueue', "<EnqueuedURI>#{uri}</EnqueuedURI><EnqueuedURIMetaData></EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>0</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>1</EnqueueAsNext>")
+    # TODO yeah, this error handling is a bit soft. For consistency's sake :)
+    pos = response.xpath('.//FirstTrackNumberEnqueued').text
+    if pos.length != 0
+      pos.to_i
+    end
+  end
+
+  # Removes a track from the queue
+  # @param[String] object_id Track's queue ID
+  def remove_from_queue(object_id)
+    send_transport_message('RemoveTrackFromQueue', "<ObjectID>#{object_id}</ObjectID><UpdateID>0</UpdateID></u:RemoveTrackFromQueue>")
+  end
+
   # Join another speaker's group.
   # Trying to call this on a stereo pair slave will fail.
   def join(master)
@@ -104,7 +122,7 @@ module Sonos::Endpoint::AVTransport
     send_transport_message('BecomeCoordinatorOfStandaloneGroup')
   end
 
-private
+  private
 
   # Play a stream.
   def set_av_transport_uri(uri)
