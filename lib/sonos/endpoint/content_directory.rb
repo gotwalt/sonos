@@ -28,7 +28,7 @@ module Sonos::Endpoint::ContentDirectory
     hash
   end
 
-private
+  private
 
   def content_directory_client
     @content_directory_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{CONTENT_DIRECTORY_ENDPOINT}", namespace: Sonos::NAMESPACE
@@ -40,10 +40,11 @@ private
     doc.css('item').each do |item|
       res = item.css('res').first
       result << {
+        queue_id: item['id'],
         title: item.xpath('dc:title').inner_text,
         artist: item.xpath('dc:creator').inner_text,
         album: item.xpath('upnp:album').inner_text,
-        album_art: "http://#{self.ip}:#{PORT}#{item.xpath('upnp:albumArtURI').inner_text}",
+        album_art: "http://#{self.ip}:#{Sonos::PORT}#{item.xpath('upnp:albumArtURI').inner_text}",
         duration: res['duration'],
         id: res.inner_text
       }
