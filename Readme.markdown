@@ -53,6 +53,8 @@ speaker.volume
 speaker.volume = 70
 speaker.volume -= 10
 speaker.queue
+speaker.add_to_queue 'http://assets.samsoff.es/music/Airports.mp3'
+speaker.remove_from_queue(speaker.queue[:items].last[:queue_id])
 speaker.save_queue 'Jams'
 speaker.clear_queue
 ```
@@ -91,7 +93,6 @@ You can also run `sonos pause_all` to pause all your Sonos groups.
 * Set repeat mode
 * Search music library
 * Browse music library
-* Add songs to queue
 * Skip to song in queue
 * Alarm clock
 * Sleep timer
