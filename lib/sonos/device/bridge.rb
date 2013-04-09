@@ -6,7 +6,7 @@ module Sonos::Device
   # Used for Zone Bridge
   class Bridge < Base
 
-    MODEL_NUMBERS = ['ZB100']
+    MODEL_NUMBERS = ['ZB100','ZP80']
 
     attr_reader :icon
 
