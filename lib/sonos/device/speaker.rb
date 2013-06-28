@@ -10,7 +10,7 @@ module Sonos::Device
     include Sonos::Endpoint::Device
     include Sonos::Endpoint::ContentDirectory
 
-    MODEL_NUMBERS = ['S3', 'S5', 'ZP90']
+    MODEL_NUMBERS = ['S3', 'S5', 'ZP90', 'Sub']
 
     attr_reader :icon
 
