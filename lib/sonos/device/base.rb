@@ -14,7 +14,7 @@ module Sonos::Device
       elsif Speaker.model_numbers.include?(model_number)
         Speaker.new(ip, data)
       else
-        raise ArgumentError.new("#{self.data[:model_number]} not supported")
+        raise ArgumentError.new("#{data[:model_number]} not supported")
       end
     end
 
