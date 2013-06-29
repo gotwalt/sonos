@@ -52,7 +52,7 @@ module Sonos
 
     desc 'speaker [name] [command] [args]', 'Control a speaker'
     def speaker(name, command, *args)
-      speakers = system.speakers.select { |s| s.name == name }
+      speakers = system.speakers.select { |s| s.name.downcase == name.downcase }
       puts "Could not find speaker" and return if speakers.length == 0
 
       speakers.each { |s| s.send command, *args }
