@@ -59,6 +59,14 @@ speaker.save_queue 'Jams'
 speaker.clear_queue
 ```
 
+Or go into what the official control from Sonos, Inc. calls "Party
+Mode": put all speakers into a single group
+
+``` ruby
+system.party_mode
+system.party_over
+```
+
 ### Topology
 
 `Sonos.discover` finds the first speaker it can. We can get all of the Sonos devices (including Bridges, etc) by calling `Sonos.system.devices`. To get the groups, call `Sonos.system.groups`.

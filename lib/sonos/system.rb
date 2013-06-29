@@ -9,11 +9,7 @@ module Sonos
     # Initialize the system
     # @param [Array] the system topology. If this is nil, it will autodiscover.
     def initialize(topology = Discovery.new.topology)
-      @topology = topology
-      @groups = []
-      @devices = @topology.collect(&:device)
-
-      construct_groups
+      rescan topology
     end
 
     # Returns all speakers
@@ -35,6 +31,50 @@ module Sonos
       end
     end
 
+    # Party Mode!  Join all speakers into a single group.
+    def party_mode new_master = nil
+      return nil unless speakers.length > 1
+
+      new_master = find_party_master if new_master.nil?
+
+      party_over
+      speakers.each do |slave|
+        next if slave.uid == new_master.uid
+        slave.join new_master
+      end
+      rescan @topology
+    end
+
+    def find_party_master
+      # 1: If there are any pre-existing groups playing something, use
+      # the lowest-numbered group's master
+      groups.each do |group|
+        return group.master_speaker if group.master_speaker.has_music?
+      end
+
+      # 2: Lowest-number speaker that's playing something
+      speakers.each do |speaker|
+        return speaker if speaker.has_music?
+      end
+
+      # 3: lowest-numbered speaker
+      speakers[0]
+    end
+    
+    # Party's over :(
+    def party_over
+      groups.each { |g| g.disband }
+      rescan @topology
+    end
+    
+    def rescan(topology = Discovery.new.topology)
+      @topology = topology
+      @groups = []
+      @devices = @topology.collect(&:device)
+
+      construct_groups
+    end
+    
   private
 
     def send_to_all_speakers(action)
