@@ -77,14 +77,6 @@ module Sonos
     
   private
 
-    def send_to_all_speakers(action)
-      if self.groups.length > 0
-        self.groups.each { |group| group.send action }
-      else
-        self.speakers.each { |speaker| speaker.send action }
-      end
-    end
-
     def construct_groups
       # Loop through all of the unique groups
       @topology.collect(&:group).uniq.each do |group_uid|
