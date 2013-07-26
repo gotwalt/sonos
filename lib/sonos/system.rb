@@ -74,7 +74,7 @@ module Sonos
 
       construct_groups
     end
-    
+
   private
 
     def construct_groups
