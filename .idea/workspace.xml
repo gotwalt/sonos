@@ -75,7 +75,7 @@
       <file leaf-file-name="alarm.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/sonos/endpoint/alarm.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="27" selection-start="1430" selection-end="1435" vertical-scroll-proportion="0.6494157">
+            <state line="40" column="67" selection-start="1752" selection-end="1752" vertical-scroll-proportion="0.7996661">
               <folding />
             </state>
           </provider>
@@ -601,7 +601,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/sonos/endpoint/alarm.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="27" selection-start="1430" selection-end="1435" vertical-scroll-proportion="0.6494157">
+        <state line="40" column="67" selection-start="1752" selection-end="1752" vertical-scroll-proportion="0.7996661">
           <folding />
         </state>
       </provider>
