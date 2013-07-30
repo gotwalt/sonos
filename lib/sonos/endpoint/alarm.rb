@@ -40,9 +40,7 @@ module Sonos::Endpoint::Alarm
   end
 
   def destroy_alarm(id)
-    options = {:ID => id}
-    part = convert_hash_to_xml(options)
-    send_alarm_message('DestroyAlarm', part)
+    send_alarm_message('DestroyAlarm', "<ID>#{id}</ID>")
   end
 
   def update_alarm
