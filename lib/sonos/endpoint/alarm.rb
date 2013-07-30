@@ -29,8 +29,30 @@ module Sonos::Endpoint::Alarm
     send_alarm_message('ListAlarms')
   end
 
+  def create_alarm
+    options = {:StartLocalTime => '13:19:00', :Duration => '02:00:00',
+               :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
+               :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0,
+               :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => nil}
+
+    part = convert_hash_to_xml(options)
+    send_alarm_message('CreateAlarm', part)
+  end
+
+  def destroy_alarm(id)
+    options = {:ID => id}
+    part = convert_hash_to_xml(options)
+    send_alarm_message('DestroyAlarm', part)
+  end
+
   def update_alarm
-    send_alarm_update_message
+    options = {:ID => 8, :StartLocalTime => '13:19:00', :Duration => '02:00:00',
+               :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
+               :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0,
+               :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => nil}
+
+    part = convert_hash_to_xml(options)
+    send_alarm_message('UpdateAlarm', part)
   end
 
   private
@@ -45,18 +67,12 @@ module Sonos::Endpoint::Alarm
     alarm_client.call(name, soap_action: action, message: message)
   end
 
-  def send_alarm_update_message(options = {})
-    options = {:ID => 8, :StartLocalTime => '13:19:00', :Duration => '02:00:00',
-               :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
-               :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0}
-
-    updatePart = '<ProgramURI>x-rincon-buzzer:0</ProgramURI><ProgramMetaData></ProgramMetaData>'
-
+  def convert_hash_to_xml(options = {})
+    updatePart = ''
     options.each do |optionKey, optionValue|
       updatePart += "<#{optionKey}>#{optionValue}</#{optionKey}>"
     end
-
-    send_alarm_message('UpdateAlarm', updatePart)
+    return updatePart
   end
 
 end
