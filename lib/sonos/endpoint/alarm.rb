@@ -29,15 +29,34 @@ module Sonos::Endpoint::Alarm
     send_alarm_message('ListAlarms')
   end
 
-private
+  def update_alarm
+    send_alarm_update_message
+  end
+
+  private
 
   def alarm_client
     @alarm_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{ALARM_CLOCK_ENDPOINT}", namespace: Sonos::NAMESPACE
   end
 
-  def send_alarm_message(name)
+  def send_alarm_message(name, part = '')
     action = "#{ALARM_CLOCK_XMLNS}##{name}"
-    message = %Q{<u:#{name} xmlns:u="#{ALARM_CLOCK_XMLNS}" />}
+    message = %Q{<u:#{name} xmlns:u="#{ALARM_CLOCK_XMLNS}">#{part}</u:#{name}>}
     alarm_client.call(name, soap_action: action, message: message)
   end
+
+  def send_alarm_update_message(options = {})
+    options = {:ID => 8, :StartLocalTime => '13:19:00', :Duration => '02:00:00',
+               :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
+               :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0}
+
+    updatePart = '<ProgramURI>x-rincon-buzzer:0</ProgramURI><ProgramMetaData></ProgramMetaData>'
+
+    options.each do |optionKey, optionValue|
+      updatePart += "<#{optionKey}>#{optionValue}</#{optionKey}>"
+    end
+
+    send_alarm_message('UpdateAlarm', updatePart)
+  end
+
 end
