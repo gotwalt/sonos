@@ -38,6 +38,6 @@ private
   def send_alarm_message(name)
     action = "#{ALARM_CLOCK_XMLNS}##{name}"
     message = %Q{<u:#{name} xmlns:u="#{ALARM_CLOCK_XMLNS}" />}
-    alarm_client.call(name, soap_action: action, message: message) 
+    alarm_client.call(name, soap_action: action, message: message)
   end
 end
