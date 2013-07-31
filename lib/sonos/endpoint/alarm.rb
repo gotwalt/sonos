@@ -52,7 +52,12 @@ module Sonos::Endpoint::Alarm
     part = convert_hash_to_xml(options)
     send_alarm_message('UpdateAlarm', part)
   end
-
+ 
+ def enable_alarm(alarmID)
+    return true if is_alarm_enabled?
+    puts "Enabled is off"
+    update_alarm
+  end
   private
 
   def alarm_client
@@ -73,4 +78,16 @@ module Sonos::Endpoint::Alarm
     return updatePart
   end
 
+ def is_alarm_enabled?
+    xml = list_alarms
+    hash = xml.to_hash
+    doc = Nokogiri::XML::Reader(hash[:list_alarms_response][:current_alarm_list])
+    doc.each do |node|
+        value = node.inner_xml
+        if value.include? "Enabled=\"0\""
+            false
+      end
+    end
+    true
+  end
 end

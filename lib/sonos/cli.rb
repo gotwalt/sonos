@@ -58,6 +58,14 @@ module Sonos
       speakers.each { |s| s.send command, *args }
     end
 
+    def listAlarms
+      speakers[0].list_alarms
+    end
+
+    def enableAlarm(alarmID)
+      speakers[0].enable_alarm(alarmID)
+    end
+
   private
 
     def system
