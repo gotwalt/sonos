@@ -26,38 +26,72 @@ module Sonos::Endpoint::Alarm
 
   # List the alarms that have been defined
   def list_alarms
-    send_alarm_message('ListAlarms')
+    hash_of_alarm_hashes = {}
+    response = send_alarm_message('ListAlarms')
+    alarm_list_reader = Nokogiri::XML::Reader(response.to_hash[:list_alarms_response][:current_alarm_list])
+    alarm_list_reader.each do |alarm_node|
+      alarm_hash = {
+          :ID => alarm_node.attribute('ID'),
+          :StartLocalTime => alarm_node.attribute('StartLocalTime'),
+          :Duration => alarm_node.attribute('Duration'),
+          :Recurrence => alarm_node.attribute('Recurrence'),
+          :Enabled => alarm_node.attribute('Enabled'),
+          :RoomUUID => alarm_node.attribute('RoomUUID'),
+          :PlayMode => alarm_node.attribute('PlayMode'),
+          :Volume => alarm_node.attribute('Volume'),
+          :IncludeLinkedZones => alarm_node.attribute('IncludeLinkedZones'),
+          :ProgramURI => alarm_node.attribute('ProgramURI'),
+          :ProgramMetaData => alarm_node.attribute('ProgramMetaData')
+      }
+      hash_of_alarm_hashes[alarm_hash[:ID]] = alarm_hash
+    end
+    return hash_of_alarm_hashes
   end
 
-  def create_alarm
-    options = {:StartLocalTime => '13:19:00', :Duration => '02:00:00',
-               :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
-               :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0,
-               :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => nil}
-
-    part = convert_hash_to_xml(options)
-    send_alarm_message('CreateAlarm', part)
+  def create_alarm(startLocalTime, duration, recurrence, enabled, roomUuid, playMode, volume, includeLinkedZones, programUri, programMetaData)
+    options = {:StartLocalTime => startLocalTime, :Duration => duration,
+               :Recurrence => recurrence, :Enabled => enabled, :RoomUUID => roomUuid,
+               :PlayMode => playMode, :Volume => volume, :IncludeLinkedZones => includeLinkedZones,
+               :ProgramURI => programUri, :ProgramMetaData => programMetaData}
+    #options = {:StartLocalTime => '13:19:00', :Duration => '02:00:00',
+    #           :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
+    #           :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0,
+    #           :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => nil}
+    send_alarm_message('CreateAlarm', convert_hash_to_xml(options))
   end
 
   def destroy_alarm(id)
     send_alarm_message('DestroyAlarm', "<ID>#{id}</ID>")
   end
 
-  def update_alarm
-    options = {:ID => 8, :StartLocalTime => '13:19:00', :Duration => '02:00:00',
-               :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
-               :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0,
-               :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => nil}
+  def update_alarm(id, startLocalTime, duration, recurrence, enabled, roomUuid, playMode, volume, includeLinkedZones, programUri, programMetaData)
+    alarm_hash = {:ID => id, :StartLocalTime => startLocalTime, :Duration => duration,
+               :Recurrence => recurrence, :Enabled => enabled, :RoomUUID => roomUuid,
+               :PlayMode => playMode, :Volume => volume, :IncludeLinkedZones => includeLinkedZones,
+               :ProgramURI => programUri, :ProgramMetaData => programMetaData}
+    #options = {:ID => 8, :StartLocalTime => '13:19:00', :Duration => '02:00:00',
+    #           :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
+    #           :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0,
+    #           :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => nil}
+    send_alarm_message('UpdateAlarm', convert_hash_to_xml(alarm_hash))
+  end
 
-    part = convert_hash_to_xml(options)
-    send_alarm_message('UpdateAlarm', part)
+  def is_alarm_enabled?(id)
+    list_alarms[id][:Enabled]
   end
- 
- def enable_alarm(alarmID)
-    return true if is_alarm_enabled?
-    puts "Enabled is off"
-    update_alarm
+
+  def enable_alarm(id)
+    alarm_hash = list_alarms[id]
+    alarm_hash[:Enabled] = '1'
+    send_alarm_message('UpdateAlarm', convert_hash_to_xml(alarm_hash))
   end
+
+  def disable_alarm(id)
+    alarm_hash = list_alarms[id]
+    alarm_hash[:Enabled] = '0'
+    send_alarm_message('UpdateAlarm', convert_hash_to_xml(alarm_hash))
+  end
+
   private
 
   def alarm_client
@@ -75,19 +109,7 @@ module Sonos::Endpoint::Alarm
     options.each do |optionKey, optionValue|
       updatePart += "<#{optionKey}>#{optionValue}</#{optionKey}>"
     end
-    return updatePart
+    updatePart
   end
 
- def is_alarm_enabled?
-    xml = list_alarms
-    hash = xml.to_hash
-    doc = Nokogiri::XML::Reader(hash[:list_alarms_response][:current_alarm_list])
-    doc.each do |node|
-        value = node.inner_xml
-        if value.include? "Enabled=\"0\""
-            false
-      end
-    end
-    true
-  end
 end
