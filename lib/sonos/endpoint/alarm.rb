@@ -30,20 +30,24 @@ module Sonos::Endpoint::Alarm
     response = send_alarm_message('ListAlarms')
     alarm_list_reader = Nokogiri::XML::Reader(response.to_hash[:list_alarms_response][:current_alarm_list])
     alarm_list_reader.each do |alarm_node|
-      alarm_hash = {
-          :ID => alarm_node.attribute('ID'),
-          :StartLocalTime => alarm_node.attribute('StartLocalTime'),
-          :Duration => alarm_node.attribute('Duration'),
-          :Recurrence => alarm_node.attribute('Recurrence'),
-          :Enabled => alarm_node.attribute('Enabled'),
-          :RoomUUID => alarm_node.attribute('RoomUUID'),
-          :PlayMode => alarm_node.attribute('PlayMode'),
-          :Volume => alarm_node.attribute('Volume'),
-          :IncludeLinkedZones => alarm_node.attribute('IncludeLinkedZones'),
-          :ProgramURI => alarm_node.attribute('ProgramURI'),
-          :ProgramMetaData => alarm_node.attribute('ProgramMetaData')
-      }
-      hash_of_alarm_hashes[alarm_hash[:ID]] = alarm_hash
+      id = alarm_node.attribute('ID')
+      unless id.nil?
+        alarm_hash = {
+            :ID => id,
+            # UpdateAlarm expects 'StartLocalTime', but the ListAlarm response attribute is 'StartTime'
+            :StartLocalTime => alarm_node.attribute('StartTime'),
+            :Duration => alarm_node.attribute('Duration'),
+            :Recurrence => alarm_node.attribute('Recurrence'),
+            :Enabled => alarm_node.attribute('Enabled'),
+            :RoomUUID => alarm_node.attribute('RoomUUID'),
+            :PlayMode => alarm_node.attribute('PlayMode'),
+            :Volume => alarm_node.attribute('Volume'),
+            :IncludeLinkedZones => alarm_node.attribute('IncludeLinkedZones'),
+            :ProgramURI => alarm_node.attribute('ProgramURI'),
+            :ProgramMetaData => alarm_node.attribute('ProgramMetaData')
+        }
+        hash_of_alarm_hashes[id] = alarm_hash
+      end
     end
     return hash_of_alarm_hashes
   end
@@ -56,7 +60,7 @@ module Sonos::Endpoint::Alarm
     #options = {:StartLocalTime => '13:19:00', :Duration => '02:00:00',
     #           :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
     #           :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0,
-    #           :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => nil}
+    #           :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => ""}
     send_alarm_message('CreateAlarm', convert_hash_to_xml(options))
   end
 
@@ -66,13 +70,13 @@ module Sonos::Endpoint::Alarm
 
   def update_alarm(id, startLocalTime, duration, recurrence, enabled, roomUuid, playMode, volume, includeLinkedZones, programUri, programMetaData)
     alarm_hash = {:ID => id, :StartLocalTime => startLocalTime, :Duration => duration,
-               :Recurrence => recurrence, :Enabled => enabled, :RoomUUID => roomUuid,
-               :PlayMode => playMode, :Volume => volume, :IncludeLinkedZones => includeLinkedZones,
-               :ProgramURI => programUri, :ProgramMetaData => programMetaData}
+                  :Recurrence => recurrence, :Enabled => enabled, :RoomUUID => roomUuid,
+                  :PlayMode => playMode, :Volume => volume, :IncludeLinkedZones => includeLinkedZones,
+                  :ProgramURI => programUri, :ProgramMetaData => programMetaData}
     #options = {:ID => 8, :StartLocalTime => '13:19:00', :Duration => '02:00:00',
     #           :Recurrence => 'ONCE', :Enabled => 1, :RoomUUID => 'RINCON_000E583564A601400',
     #           :PlayMode => 'SHUFFLE_NOREPEAT', :Volume => 25, :IncludeLinkedZones => 0,
-    #           :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => nil}
+    #           :ProgramURI => 'x-rincon-buzzer:0', :ProgramMetaData => ""}
     send_alarm_message('UpdateAlarm', convert_hash_to_xml(alarm_hash))
   end
 
@@ -89,6 +93,12 @@ module Sonos::Endpoint::Alarm
   def disable_alarm(id)
     alarm_hash = list_alarms[id]
     alarm_hash[:Enabled] = '0'
+    send_alarm_message('UpdateAlarm', convert_hash_to_xml(alarm_hash))
+  end
+
+  def set_alarm_volume(id, volume)
+    alarm_hash = list_alarms[id]
+    alarm_hash[:Volume] = volume
     send_alarm_message('UpdateAlarm', convert_hash_to_xml(alarm_hash))
   end
 
