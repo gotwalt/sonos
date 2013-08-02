@@ -58,12 +58,34 @@ module Sonos
       speakers.each { |s| s.send command, *args }
     end
 
-    def listAlarms
-      speakers[0].list_alarms
+    desc 'list_alarms', 'List all alarms.'
+    def list_alarms
+      puts speakers[0].list_alarms
     end
 
-    def enableAlarm(alarmID)
-      speakers[0].enable_alarm(alarmID)
+    desc 'is_alarm_enabled? [alarm_id]', 'Check if an alarm is enabled.'
+    def is_alarm_enabled?(alarm_id)
+      puts speakers[0].is_alarm_enabled?(alarm_id)
+    end
+
+    desc 'enable_alarm [alarm_id]', 'Enable an alarm.'
+    def enable_alarm(alarm_id)
+      speakers[0].enable_alarm(alarm_id)
+    end
+
+    desc 'disable_alarm [alarm_id]', 'Disable an alarm.'
+    def disable_alarm(alarm_id)
+      speakers[0].disable_alarm(alarm_id)
+    end
+
+    desc 'set_alarm_volume [alarm_id] [volume]', 'Set the volume for an alarm.'
+    def set_alarm_volume(alarm_id, volume)
+      speakers[0].set_alarm_volume(alarm_id, volume)
+    end
+
+    desc 'destroy_alarm [alarm_id]', 'Destroy an alarm.'
+    def destroy_alarm(alarm_id)
+      speakers[0].destroy_alarm(alarm_id)
     end
 
   private
