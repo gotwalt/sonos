@@ -13,6 +13,7 @@ module Sonos::Device
     MODEL_NUMBERS = ['S3', 'S5', 'S9', 'ZP90', 'ZP120', 'Sub']
 
     attr_reader :icon
+    attr_accessor :group_master
 
     def self.model_numbers
       MODEL_NUMBERS
