@@ -9,6 +9,7 @@ module Sonos::Device
     include Sonos::Endpoint::Rendering
     include Sonos::Endpoint::Device
     include Sonos::Endpoint::ContentDirectory
+    include Sonos::Endpoint::Alarm
 
     MODEL_NUMBERS = ['S3', 'S5', 'S9', 'ZP90', 'ZP120', 'Sub']
 
