@@ -67,7 +67,7 @@ module Sonos::Device
       send_transport_message('SetPlayMode', "<NewPlayMode>SHUFFLE</NewPlayMode>")           if (status[:shuffle]  && status[:repeat] )
       send_transport_message('SetPlayMode', "<NewPlayMode>SHUFFLE_NOREPEAT</NewPlayMode>")  if (status[:shuffle]  && !status[:repeat])
       send_transport_message('SetPlayMode', "<NewPlayMode>REPEAT_ALL</NewPlayMode>")        if (!status[:shuffle] && status[:repeat] )
-      send_transport_message('SetPlayMode', "<NewPlayMode>SHUFFLE_NOREPEAT</NewPlayMode>")  if (!status[:shuffle] && !status[:repeat])
+      send_transport_message('SetPlayMode', "<NewPlayMode>NORMAL</NewPlayMode>")            if (!status[:shuffle] && !status[:repeat])
     end
 
     def set_crossfade(crossfade)
@@ -78,9 +78,9 @@ module Sonos::Device
     def get_playmode
       doc = Nokogiri::XML(open("http://#{self.group_master.ip}:#{Sonos::PORT}/status/playmode"))
       playmode = {}
-      playmode[:shuffle] = doc.xpath('//Shuffle').inner_text == "On" ? true : false
-      playmode[:repeat] = doc.xpath('//Repeat').inner_text == "On" ? true : false
-      playmode[:crossfade] = doc.xpath('//Crossfade').inner_text == "On" ? true : false
+      playmode[:shuffle] = doc.xpath('//Shuffle').inner_text == "On"
+      playmode[:repeat] = doc.xpath('//Repeat').inner_text == "On"
+      playmode[:crossfade] = doc.xpath('//Crossfade').inner_text == "On"
       playmode
     end
     
