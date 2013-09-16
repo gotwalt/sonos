@@ -3,15 +3,17 @@ require 'nokogiri'
 
 module Sonos::Device
   class Base
-    attr_reader :ip, :name, :uid, :serial_number, :software_version, :hardware_version, :mac_address, :group
+    attr_reader :ip, :name, :uid, :serial_number, :software_version, :hardware_version,
+      :zone_type, :model_number, :mac_address, :group, :icon
 
     def self.detect(ip)
       data = retrieve_information(ip)
       model_number = data[:model_number]
 
-      if Bridge.model_numbers.include?(model_number)
-        Bridge.new(ip, data)
-      elsif Speaker.model_numbers.include?(model_number)
+      # TODO: Clean up
+      if Accessory.models.keys.include?(model_number.to_sym)
+        Accessory.new(ip, data)
+      elsif Speaker.models.keys.include?(model_number.to_sym)
         Speaker.new(ip, data)
       else
         raise ArgumentError.new("#{data[:model_number]} not supported")
@@ -48,6 +50,12 @@ module Sonos::Device
         zone_type: @zone_type,
         model_number: @model_number
       }
+    end
+
+    # Get the device's model
+    # @return [String] a string representation of the device's model
+    def model
+      self.class.models[@model_number.to_sym]
     end
 
     # Can this device play music?

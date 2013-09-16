@@ -5,4 +5,4 @@ end
 
 require 'sonos/device/base'
 require 'sonos/device/speaker'
-require 'sonos/device/bridge'
+require 'sonos/device/accessory'
