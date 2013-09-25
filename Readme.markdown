@@ -1,6 +1,6 @@
 # Sonos
 
-Control Sonos speakers with Ruby.
+Control [Sonos](https://refer.sonos.com/raf/invite?code=k8k8mq9hg) speakers with Ruby.
 
 Huge thanks to [Rahim Sonawalla](https://github.com/rahims) for making [SoCo](https://github.com/rahims/SoCo). This gem would not be possible without his work.
 
