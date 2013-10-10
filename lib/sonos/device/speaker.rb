@@ -9,6 +9,7 @@ module Sonos::Device
     include Sonos::Endpoint::Rendering
     include Sonos::Endpoint::Device
     include Sonos::Endpoint::ContentDirectory
+    include Sonos::Endpoint::Upnp
 
     MODELS = {
       :'S3'    => 'PLAY:3',     # Released Jul 2011
