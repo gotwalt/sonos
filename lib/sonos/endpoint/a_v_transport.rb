@@ -130,7 +130,7 @@ module Sonos::Endpoint::AVTransport
   end
 
   def transport_client
-    @transport_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE
+    @transport_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log_level: :error
   end
 
   def send_transport_message(name, part = '<Speed>1</Speed>')
