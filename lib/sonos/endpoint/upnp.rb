@@ -21,7 +21,7 @@ module Sonos::Endpoint::Upnp
   end
 
   def unsubscribe_from_upnp_events(sid)
-    HTTPClient.new.request(:subscribe, event_uri, header: {'SID' => sid })
+    HTTPClient.new.request(:unsubscribe, event_uri, header: {'SID' => sid })
   end
 
   private
