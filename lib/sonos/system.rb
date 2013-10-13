@@ -73,26 +73,38 @@ module Sonos
       @devices = @topology.collect(&:device)
 
       construct_groups
+
+      speakers.each do |speaker|
+        speaker.group_master = speaker
+        @groups.each do |group|
+          speaker.group_master = group.master_speaker if group.master_speaker.uid == speaker.uid
+          group.slave_speakers.each do |slave|
+            speaker.group_master = group.master_speaker if slave.uid == speaker.uid
+          end
+        end
+      end
     end
-    
+
   private
 
     def construct_groups
       # Loop through all of the unique groups
       @topology.collect(&:group).uniq.each do |group_uid|
-        master_uuid = group_uid.split(':').first
-        nodes = []
+
+        # set group's master nade using topology's coordinator parameter
         master = nil
-
         @topology.each do |node|
-          # Select all of the nodes with this group uid
+          # Select only the nodes with this group uid
           next unless node.group == group_uid
+          master = node if node.coordinator == "true"
+        end
 
-          if node.uuid == master_uuid
-            master = node
-          else
-            nodes << node
-          end
+        # register other nodes in groups as slave nodes
+        nodes = []
+        @topology.each do |node|
+          # Select only the nodes with this group uid
+          next unless node.group == group_uid
+          nodes << node unless node.uuid == master.uuid
         end
 
         # Skip this group if there are no nodes or master

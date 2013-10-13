@@ -3,6 +3,7 @@
 .bundle
 .config
 .yardoc
+.idea
 Gemfile.lock
 InstalledFiles
 _yardoc
@@ -15,3 +16,4 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+

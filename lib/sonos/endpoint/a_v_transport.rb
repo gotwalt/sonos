@@ -71,9 +71,7 @@ module Sonos::Endpoint::AVTransport
   def seek(seconds = 0)
     # Must be sent in the format of HH:MM:SS
     timestamp = Time.at(seconds).utc.strftime('%H:%M:%S')
-
     send_transport_message('Seek', "<Unit>REL_TIME</Unit><Target>#{timestamp}</Target>")
-
   end
 
   # Clear the queue
@@ -130,7 +128,7 @@ module Sonos::Endpoint::AVTransport
   end
 
   def transport_client
-    @transport_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log_level: :error
+    @transport_client ||= Savon.client endpoint: "http://#{self.group_master.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log_level: :error
   end
 
   def send_transport_message(name, part = '<Speed>1</Speed>')
