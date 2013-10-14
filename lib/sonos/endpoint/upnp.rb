@@ -8,7 +8,14 @@ module Sonos::Endpoint::Upnp
     av_transport: '/MediaRenderer/AVTransport/Event',
     zone_group_topology: '/ZoneGroupTopology/Event',
     device_properties: '/DeviceProperties/Event',
-    group_management: '/GroupManagement/Event'
+    group_management: '/GroupManagement/Event',
+    group_rendering_control: '/MediaRenderer/GroupRenderingControl/Event',
+    rendering_control: '/MediaRenderer/RenderingControl/Event',
+    connection_manager: '/MediaRenderer/ConnectionManager/Event',
+    queue: '/MediaRenderer/Queue/Event',
+    alarm_clock: '/AlarmClock/Event',
+    music_services: '/MusicServices/Event',
+    system_properties: '/SystemProperties/Event'
   }.freeze
 
   # Subscribes to UPNP events, with callbacks being sent to the provided URL
