@@ -9,6 +9,7 @@ module Sonos::Device
     include Sonos::Endpoint::Rendering
     include Sonos::Endpoint::Device
     include Sonos::Endpoint::ContentDirectory
+    include Sonos::Endpoint::Upnp
     include Sonos::Endpoint::Alarm
 
     MODELS = {
@@ -53,7 +54,7 @@ module Sonos::Device
     def crossfade_off
       set_crossfade(false)
     end
-    
+
     def shuffle_repeat_change(command)
       status = get_playmode
       case command
@@ -89,6 +90,6 @@ module Sonos::Device
       playmode[:crossfade] = doc.xpath('//Crossfade').inner_text == "On"
       playmode
     end
-    
+
   end
 end

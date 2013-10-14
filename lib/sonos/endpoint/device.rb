@@ -11,7 +11,7 @@ module Sonos::Endpoint::Device
 private
 
   def device_client
-    @device_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{DEVICE_ENDPOINT}", namespace: Sonos::NAMESPACE
+    @device_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{DEVICE_ENDPOINT}", namespace: Sonos::NAMESPACE, log_level: :error
   end
 
   def send_device_message(name, value)
