@@ -13,6 +13,7 @@ module Sonos::Device
     include Sonos::Endpoint::Alarm
 
     MODELS = {
+      :'S1'    => 'PLAY:1',     # Released Oct 2013
       :'S3'    => 'PLAY:3',     # Released Jul 2011
       :'S5'    => 'PLAY:5',     # Released Nov 2009
       :'S9'    => 'PLAYBAR',    # Released Feb 2013
