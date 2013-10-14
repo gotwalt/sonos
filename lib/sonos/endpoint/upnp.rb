@@ -31,7 +31,7 @@ module Sonos::Endpoint::Upnp
       # Apparently required in order to appease the UPNP gods
       'NT' => 'upnp:event',
       # The timeout for the subscription - set to 10 minutes
-      'Timeout' => "Seconds-#{UPNP_TIMEOUT}"
+      'TIMEOUT' => "Second-#{UPNP_TIMEOUT}"
     }
 
     response = client.request(:subscribe, event_url(event), header: request_headers)
