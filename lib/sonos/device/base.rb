@@ -6,6 +6,8 @@ module Sonos::Device
     attr_reader :ip, :name, :uid, :serial_number, :software_version, :hardware_version,
       :zone_type, :model_number, :mac_address, :group, :icon
 
+    attr_accessor :group_master
+
     def self.detect(ip)
       data = retrieve_information(ip)
       model_number = data[:model_number]
