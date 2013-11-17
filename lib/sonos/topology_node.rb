@@ -15,7 +15,7 @@ module Sonos
     end
 
     def device
-      @device || Device::Base.detect(ip)
+      @device ||= Device::Base.detect(ip)
     end
   end
 end
