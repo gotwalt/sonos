@@ -29,7 +29,7 @@ module Sonos::Device
     end
 
     def speaker?
-      true
+      services.include?('urn:upnp-org:serviceId:MusicServices')
     end
 
     def shuffle_on
