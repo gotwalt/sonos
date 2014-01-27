@@ -3,7 +3,7 @@ module Sonos
   # play the same music in sync.
   class Group
     # The master speaker in the group
-    attr_reader :master_speaker
+    attr_accessor :master_speaker
 
     # All other speakers in the group
     attr_reader :slave_speakers

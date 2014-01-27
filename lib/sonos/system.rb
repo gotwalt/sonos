@@ -71,13 +71,16 @@ module Sonos
       @topology = topology
       @groups = []
       @devices = @topology.collect(&:device)
-
+      
       construct_groups
 
       speakers.each do |speaker|
         speaker.group_master = speaker
         @groups.each do |group|
-          speaker.group_master = group.master_speaker if group.master_speaker.uid == speaker.uid
+          if group.master_speaker.uid == speaker.uid
+            speaker.group_master = speaker
+            group.master_speaker = speaker
+          end
           group.slave_speakers.each do |slave|
             speaker.group_master = group.master_speaker if slave.uid == speaker.uid
           end
