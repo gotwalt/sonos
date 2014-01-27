@@ -108,7 +108,7 @@ module Sonos
         end
 
         # Skip this group if there are no nodes or master
-        next if nodes.empty? or master.nil?
+        next if master.nil?
 
         # Add the group
         @groups << Group.new(master.device, nodes.collect(&:device))
