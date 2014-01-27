@@ -107,7 +107,7 @@ module Sonos
           nodes << node unless node.uuid == master.uuid
         end
 
-        # Skip this group if there are no nodes or master
+        # Skip this group if there is no master
         next if master.nil?
 
         # Add the group
