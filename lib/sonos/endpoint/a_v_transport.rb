@@ -65,6 +65,10 @@ module Sonos::Endpoint::AVTransport
   def previous
     send_transport_message('Previous')
   end
+  
+  def line_in(speaker)
+    set_av_transport_uri('x-rincon-stream:' + speaker.uid.sub('uuid:', ''))
+  end
 
   # Seeks to a given timestamp in the current track
   # @param [Fixnum] seconds
