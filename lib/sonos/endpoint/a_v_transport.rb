@@ -102,15 +102,59 @@ module Sonos::Endpoint::AVTransport
 
   # Adds a track to the queue
   # @param[String] uri Uri of track
+  # @param[String] didl Stanza of DIDL-Lite metadata (generally created by #add_spotify_to_queue)
   # @return[Integer] Queue position of the added track
-  def add_to_queue(uri)
-    response = send_transport_message('AddURIToQueue', "<EnqueuedURI>#{uri}</EnqueuedURI><EnqueuedURIMetaData></EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>0</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>1</EnqueueAsNext>")
+  def add_to_queue(uri, didl = '')
+    response = send_transport_message('AddURIToQueue', "<EnqueuedURI>#{uri}</EnqueuedURI><EnqueuedURIMetaData>#{didl}</EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>0</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>1</EnqueueAsNext>")
     # TODO yeah, this error handling is a bit soft. For consistency's sake :)
     pos = response.xpath('.//FirstTrackNumberEnqueued').text
     if pos.length != 0
       pos.to_i
     end
   end
+
+  # Adds a Spotify track to the queue along with extra data for better metadata retrieval
+  # @param[Hash] opts Various options (id, user, region and type)
+  # @return[Integer] Queue position of the added track(s)
+  def add_spotify_to_queue(opts = {})
+    opts = {
+      :id     => '',
+      :user   => nil,
+      :region => nil,
+      :type   => 'track'
+    }.merge(opts)
+
+    # Basic validation of the accepted types; playlists need an associated user
+    # and the toplist (for tracks and albums) need to specify a region.
+    return nil if opts[:type] == 'playlist' and opts[:user].nil?
+    return nil if opts[:type] =~ /toplist_tracks/ and opts[:region].nil?
+
+    # In order for the player to retrieve track duration, artist, album etc
+    # we need to pass it some metadata ourselves.
+    didl_metadata = "&lt;DIDL-Lite xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:upnp=&quot;urn:schemas-upnp-org:metadata-1-0/upnp/&quot; xmlns:r=&quot;urn:schemas-rinconnetworks-com:metadata-1-0/&quot; xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&quot;&gt;&lt;item id=&quot;#{rand(10000000..99999999)}spotify%3a#{opts[:type]}%3a#{opts[:id]}&quot; restricted=&quot;true&quot;&gt;&lt;dc:title&gt;&lt;/dc:title&gt;&lt;upnp:class&gt;object.item.audioItem.musicTrack&lt;/upnp:class&gt;&lt;desc id=&quot;cdudn&quot; nameSpace=&quot;urn:schemas-rinconnetworks-com:metadata-1-0/&quot;&gt;SA_RINCON2311_X_#Svc2311-0-Token&lt;/desc&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;"
+
+    r_id = rand(10000000..99999999)
+
+    case opts[:type]
+    when /playlist/
+      uri = "x-rincon-cpcontainer:#{r_id}spotify%3auser%3a#{opts[:user]}%3aplaylist%3a#{opts[:id]}"
+    when /toplist_(tracks)/
+      subtype = opts[:type].sub('toplist_', '') # only 'tracks' are supported right now by Sonos.
+      uri = "x-rincon-cpcontainer:#{r_id}toplist%2f#{subtype}%2fregion%2f#{opts[:region]}"
+    when /album/
+      uri = "x-rincon-cpcontainer:#{r_id}spotify%3aalbum%3a#{opts[:id]}"
+    when /artist/
+      uri = "x-rincon-cpcontainer:#{r_id}tophits%3aspotify%3aartist%3a#{opts[:id]}"
+    when /starred/
+      uri = "x-rincon-cpcontainer:#{r_id}starred"
+    when /track/
+      uri = "x-sonos-spotify:spotify%3a#{opts[:type]}%3a#{opts[:id]}"
+    else
+      return nil
+    end
+
+    add_to_queue(uri, didl_metadata)
+   end
 
   # Removes a track from the queue
   # @param[String] object_id Track's queue ID
