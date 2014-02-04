@@ -36,6 +36,18 @@ module Sonos::Endpoint::AVTransport
     !now_playing.nil?
   end
 
+  # Get information about the state the player is in.
+  def get_player_state
+    response = send_transport_message('GetTransportInfo')
+    body = response.body[:get_transport_info_response]
+
+    {
+      status: body[:current_transport_status],
+      state:  body[:current_transport_state],
+      speed:  body[:current_speed],
+    }
+  end
+
   # Pause the currently playing track.
   def pause
     parse_response send_transport_message('Pause')
