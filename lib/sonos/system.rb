@@ -107,8 +107,8 @@ module Sonos
           nodes << node unless node.uuid == master.uuid
         end
 
-        # Skip this group if there are no nodes or master
-        next if nodes.empty? or master.nil?
+        # Skip this group if there is no master
+        next if master.nil?
 
         # Add the group
         @groups << Group.new(master.device, nodes.collect(&:device))
