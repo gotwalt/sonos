@@ -6,6 +6,8 @@ Huge thanks to [Rahim Sonawalla](https://github.com/rahims) for making [SoCo](ht
 
 [![Code Climate](https://codeclimate.com/github/soffes/sonos.png)](https://codeclimate.com/github/soffes/sonos)
 
+**Note: Currently discovery is broken in Ruby 2.1**
+
 ## Installation
 
 Add this line to your application's Gemfile:
