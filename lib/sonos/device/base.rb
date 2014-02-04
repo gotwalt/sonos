@@ -69,7 +69,7 @@ module Sonos::Device
   protected
 
     def parse_response(response)
-      response.success?
+      response.success? ? :success : :failed
     end
 
     def self.retrieve_information(ip)
