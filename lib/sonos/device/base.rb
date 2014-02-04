@@ -4,7 +4,7 @@ require 'nokogiri'
 module Sonos::Device
   class Base
     attr_reader :ip, :name, :uid, :serial_number, :software_version, :hardware_version,
-      :zone_type, :model_number, :mac_address, :group, :icon
+      :zone_type, :model_number, :mac_address, :group, :icon, :services
 
     attr_accessor :group_master
 
@@ -40,6 +40,7 @@ module Sonos::Device
       @hardware_version = data[:hardware_version]
       @zone_type = data[:zone_type]
       @model_number = data[:model_number]
+      @services = data[:services]
     end
 
     def data
@@ -50,7 +51,8 @@ module Sonos::Device
         software_version: @software_version,
         hardware_version: @hardware_version,
         zone_type: @zone_type,
-        model_number: @model_number
+        model_number: @model_number,
+        services: @services
       }
     end
 
@@ -86,7 +88,9 @@ module Sonos::Device
         software_version: doc.xpath('/xmlns:root/xmlns:device/xmlns:hardwareVersion').inner_text,
         hardware_version: doc.xpath('/xmlns:root/xmlns:device/xmlns:softwareVersion').inner_text,
         zone_type: doc.xpath('/xmlns:root/xmlns:device/xmlns:zoneType').inner_text,
-        model_number: doc.xpath('/xmlns:root/xmlns:device/xmlns:modelNumber').inner_text
+        model_number: doc.xpath('/xmlns:root/xmlns:device/xmlns:modelNumber').inner_text,
+        services: doc.xpath('/xmlns:root/xmlns:device/xmlns:serviceList/xmlns:service/xmlns:serviceId').
+          collect(&:inner_text)
       }
     end
   end
