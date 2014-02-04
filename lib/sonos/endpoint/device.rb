@@ -5,13 +5,13 @@ module Sonos::Endpoint::Device
   # Turn the white status light on or off
   # @param [Boolean] True to turn on the light. False to turn off the light.
   def status_light_enabled=(enabled)
-    send_device_message('SetLEDState', enabled ? 'On' : 'Off')
+    parse_response send_device_message('SetLEDState', enabled ? 'On' : 'Off')
   end
 
 private
 
   def device_client
-    @device_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{DEVICE_ENDPOINT}", namespace: Sonos::NAMESPACE, log_level: :error
+    @device_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{DEVICE_ENDPOINT}", namespace: Sonos::NAMESPACE, log: Sonos.logging_enabled
   end
 
   def send_device_message(name, value)

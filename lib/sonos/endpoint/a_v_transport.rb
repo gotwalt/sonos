@@ -38,7 +38,7 @@ module Sonos::Endpoint::AVTransport
 
   # Pause the currently playing track.
   def pause
-    send_transport_message('Pause')
+    parse_response send_transport_message('Pause')
   end
 
   # Play the currently selected track or play a stream.
@@ -48,22 +48,22 @@ module Sonos::Endpoint::AVTransport
     set_av_transport_uri(uri) and return if uri
 
     # Play the currently selected track
-    send_transport_message('Play')
+    parse_response send_transport_message('Play')
   end
 
   # Stop playing.
   def stop
-    send_transport_message('Stop')
+    parse_response send_transport_message('Stop')
   end
 
   # Play the next track.
   def next
-    send_transport_message('Next')
+    parse_response send_transport_message('Next')
   end
 
   # Play the previous track.
   def previous
-    send_transport_message('Previous')
+    parse_response send_transport_message('Previous')
   end
 
   # Seeks to a given timestamp in the current track
@@ -71,17 +71,17 @@ module Sonos::Endpoint::AVTransport
   def seek(seconds = 0)
     # Must be sent in the format of HH:MM:SS
     timestamp = Time.at(seconds).utc.strftime('%H:%M:%S')
-    send_transport_message('Seek', "<Unit>REL_TIME</Unit><Target>#{timestamp}</Target>")
+    parse_response send_transport_message('Seek', "<Unit>REL_TIME</Unit><Target>#{timestamp}</Target>")
   end
 
   # Clear the queue
   def clear_queue
-    send_transport_message('RemoveAllTracksFromQueue')
+    parse_response parse_response send_transport_message('RemoveAllTracksFromQueue')
   end
 
   # Save queue
   def save_queue(title)
-    send_transport_message('SaveQueue', "<Title>#{title}</Title><ObjectID></ObjectID>")
+    parse_response send_transport_message('SaveQueue', "<Title>#{title}</Title><ObjectID></ObjectID>")
   end
 
   # Adds a track to the queue
@@ -99,13 +99,13 @@ module Sonos::Endpoint::AVTransport
   # Removes a track from the queue
   # @param[String] object_id Track's queue ID
   def remove_from_queue(object_id)
-    send_transport_message('RemoveTrackFromQueue', "<ObjectID>#{object_id}</ObjectID><UpdateID>0</UpdateID></u:RemoveTrackFromQueue>")
+    parse_response send_transport_message('RemoveTrackFromQueue', "<ObjectID>#{object_id}</ObjectID><UpdateID>0</UpdateID></u:RemoveTrackFromQueue>")
   end
 
   # Join another speaker's group.
   # Trying to call this on a stereo pair slave will fail.
   def join(master)
-    set_av_transport_uri('x-rincon:' + master.uid.sub('uuid:', ''))
+    parse_response set_av_transport_uri('x-rincon:' + master.uid.sub('uuid:', ''))
   end
 
   # Add another speaker to this group.
@@ -117,7 +117,7 @@ module Sonos::Endpoint::AVTransport
   # Ungroup from its current group.
   # Trying to call this on a stereo pair slave will fail.
   def ungroup
-    send_transport_message('BecomeCoordinatorOfStandaloneGroup')
+    parse_response send_transport_message('BecomeCoordinatorOfStandaloneGroup')
   end
 
   private
@@ -128,7 +128,7 @@ module Sonos::Endpoint::AVTransport
   end
 
   def transport_client
-    @transport_client ||= Savon.client endpoint: "http://#{self.group_master.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log_level: :error
+    @transport_client ||= Savon.client endpoint: "http://#{self.group_master.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log: Sonos.logging_enabled
   end
 
   def send_transport_message(name, part = '<Speed>1</Speed>')

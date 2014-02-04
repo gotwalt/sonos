@@ -68,6 +68,10 @@ module Sonos::Device
 
   protected
 
+    def parse_response(response)
+      response.success?
+    end
+
     def self.retrieve_information(ip)
       url = "http://#{ip}:#{Sonos::PORT}/xml/device_description.xml"
       parse_description(Nokogiri::XML(open(url)))

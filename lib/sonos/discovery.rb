@@ -16,14 +16,13 @@ module Sonos
   class Discovery
     MULTICAST_ADDR = '239.255.255.250'
     MULTICAST_PORT = 1900
-    DEFAULT_TIMEOUT = 1
-    DEFAULT_IP = nil
+    DEFAULT_TIMEOUT = 2
 
     attr_reader :timeout
     attr_reader :first_device_ip
     attr_reader :default_ip
 
-    def initialize(timeout = DEFAULT_TIMEOUT,default_ip = DEFAULT_IP)
+    def initialize(timeout = DEFAULT_TIMEOUT, default_ip = nil)
       @timeout = timeout
       @default_ip = default_ip
       initialize_socket
@@ -65,7 +64,8 @@ module Sonos
           end
         end
       rescue Timeout::Error => ex
-        puts "Timeout error; switching to the default IP"
+        puts 'Timed out...'
+        puts 'Switching to the default IP' if @default_ip
         return @default_ip
       end
     end
@@ -74,8 +74,8 @@ module Sonos
       # Create a socket
       @socket = UDPSocket.open
 
-      # We're going to use IP with the multicast TTL. Mystery third parameter is a mystery.
-      @socket.setsockopt(Socket::IPPROTO_IP, Socket::IP_MULTICAST_TTL, 2)
+      # We're going to use IP with the multicast TTL
+      @socket.setsockopt(Socket::Option.new(:INET, :IPPROTO_IP, :IP_MULTICAST_TTL, 2.chr))
     end
 
     def search_message

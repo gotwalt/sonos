@@ -31,7 +31,7 @@ module Sonos::Endpoint::ContentDirectory
   private
 
   def content_directory_client
-    @content_directory_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{CONTENT_DIRECTORY_ENDPOINT}", namespace: Sonos::NAMESPACE, log_level: :error
+    @content_directory_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{CONTENT_DIRECTORY_ENDPOINT}", namespace: Sonos::NAMESPACE, log: Sonos.logging_enabled
   end
 
   def parse_items(string)

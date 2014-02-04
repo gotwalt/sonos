@@ -14,7 +14,7 @@ module Sonos::Endpoint::Rendering
   # Trying to set the volume of a fixed volume speaker will fail.
   # @param [Fixnum] the desired volume from 0 to 100
   def volume=(value)
-    send_rendering_message('SetVolume', value)
+    parse_response send_rendering_message('SetVolume', value)
   end
 
   # Get the current bass EQ.
@@ -27,7 +27,7 @@ module Sonos::Endpoint::Rendering
   # Set the bass EQ from -10 to 10.
   # @param [Fixnum] the desired bass EQ from -10 to 10
   def bass=(value)
-    send_rendering_message('SetBass', value)
+    parse_response send_rendering_message('SetBass', value)
   end
 
   # Get the current treble EQ.
@@ -40,17 +40,17 @@ module Sonos::Endpoint::Rendering
   # Set the treble EQ from -10 to 10.
   # @param [Fixnum] the desired treble EQ from -10 to 10
   def treble=(value)
-    send_rendering_message('SetTreble', value)
+    parse_response send_rendering_message('SetTreble', value)
   end
 
   # Mute the speaker
   def mute
-    set_mute(true)
+    parse_response set_mute(true)
   end
 
   # Unmute the speaker
   def unmute
-    set_mute(false)
+    parse_response set_mute(false)
   end
 
   # Is the speaker muted?
@@ -70,7 +70,7 @@ module Sonos::Endpoint::Rendering
   # Set the loudness compenstation setting
   # @param [Boolean] if the speaker has loudness on or not
   def loudness=(value)
-    send_rendering_message('SetLoudness', value ? 1 : 0)
+    parse_response send_rendering_message('SetLoudness', value ? 1 : 0)
   end
 
 private
@@ -82,7 +82,7 @@ private
   end
 
   def rendering_client
-    @rendering_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{RENDERING_ENDPOINT}", namespace: Sonos::NAMESPACE, log_level: :error
+    @rendering_client ||= Savon.client endpoint: "http://#{self.ip}:#{Sonos::PORT}#{RENDERING_ENDPOINT}", namespace: Sonos::NAMESPACE, log: Sonos.logging_enabled
   end
 
   def send_rendering_message(name, value = nil)

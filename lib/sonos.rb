@@ -18,4 +18,16 @@ module Sonos
   # def self.system
   #   @system ||= Sonos::System.new
   # end
+
+  unless defined? @@logging_enabled
+    @@logging_enabled = false
+  end
+
+  def self.logging_enabled
+    @@logging_enabled
+  end
+
+  def self.logging_enabled=(logging)
+    @@logging_enabled = logging
+  end
 end
