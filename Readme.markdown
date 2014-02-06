@@ -98,9 +98,6 @@ You can also run `sonos pause_all` to pause all your Sonos groups.
 * Pause all (there is no play all in the controller, we could loop through and do it though)
 * Party Mode
 * Line-in
-* Toggle cross fade
-* Toggle shuffle
-* Set repeat mode
 * Search music library
 * Browse music library
 * Skip to song in queue
