@@ -77,7 +77,7 @@ module Sonos::Endpoint::AVTransport
   def previous
     parse_response send_transport_message('Previous')
   end
-  
+
   def line_in(speaker)
     set_av_transport_uri('x-rincon-stream:' + speaker.uid.sub('uuid:', ''))
   end
@@ -178,6 +178,19 @@ module Sonos::Endpoint::AVTransport
   # Trying to call this on a stereo pair slave will fail.
   def ungroup
     parse_response send_transport_message('BecomeCoordinatorOfStandaloneGroup')
+  end
+
+  # Set a sleep timer up to 23:59:59
+  # E.g. '00:11:00' for 11 minutes.
+  # @param duration [String] Duration of timer or nil to clear.
+  def set_sleep_timer(duration)
+    if duration.nil?
+      duration = ''
+    elsif duration.gsub(':', '').to_i > 235959
+      duration = '23:59:59'
+    end
+
+    parse_response send_transport_message('ConfigureSleepTimer', "<NewSleepTimerDuration>#{duration}</NewSleepTimerDuration>")
   end
 
   private
