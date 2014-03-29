@@ -77,7 +77,7 @@ module Sonos::Endpoint::AVTransport
   def previous
     parse_response send_transport_message('Previous')
   end
-  
+
   def line_in(speaker)
     set_av_transport_uri('x-rincon-stream:' + speaker.uid.sub('uuid:', ''))
   end
@@ -154,6 +154,44 @@ module Sonos::Endpoint::AVTransport
     end
 
     add_to_queue(uri, didl_metadata)
+   end
+
+   # Add an Rdio object to the queue (album or track), anything else can only
+   # be streamed (play now).
+   # @param[Hash] opts Various options (album/track keys, username and type)
+   # @return[Integer] Queue position of the added track(s)
+   def add_rdio_to_queue(opts = {})
+     opts = {
+       :username => nil,
+       :album    => nil,
+       :track    => nil,
+       :type     => 'track',
+       :format   => 'mp3' # can be changed, but only 'mp3' is valid.
+     }.merge(opts)
+
+     return nil if opts[:username].nil?
+
+     # Both tracks and albums require the album key. And tracks need a track
+     # key of course.
+     return nil if opts[:album].nil?
+     return nil if opts[:type] == 'track' and opts[:track].nil?
+
+     # In order for valid DIDL we'll pass an empty :track for albums.
+     opts[:track] = '' if opts[:type] == 'album'
+
+     didl_metadata = "&lt;DIDL-Lite xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:upnp=&quot;urn:schemas-upnp-org:metadata-1-0/upnp/&quot; xmlns:r=&quot;urn:schemas-rinconnetworks-com:metadata-1-0/&quot; xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&quot;&gt;&lt;item id=&quot;00030020_t%3a%3a#{opts[:track]}%3a%3aa%3a%3a#{opts[:album]}&quot; parentID=&quot;0004006c_a%3a%3a#{opts[:album]}&quot; restricted=&quot;true&quot;&gt;&lt;dc:title&gt;&lt;/dc:title&gt;&lt;upnp:class&gt;object.item.audioItem.musicTrack&lt;/upnp:class&gt;&lt;desc id=&quot;cdudn&quot; nameSpace=&quot;urn:schemas-rinconnetworks-com:metadata-1-0/&quot;&gt;SA_RINCON2823_#{opts[:username]}&lt;/desc&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;"
+
+     case opts[:type]
+     when /track/
+       uri = "x-sonos-http:_t%3a%3a#{opts[:track]}%3a%3aa%3a%3a#{opts[:album]}.#{opts[:format]}?sid=11&amp;flags=32"
+     when /album/
+       type_id = '0004006c_a'
+       uri = "x-rincon-cpcontainer:#{type_id}%3a%3a#{opts[:album]}"
+     else
+       return nil
+     end
+
+     add_to_queue(uri, didl_metadata)
    end
 
   # Removes a track from the queue
