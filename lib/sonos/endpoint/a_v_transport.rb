@@ -103,9 +103,10 @@ module Sonos::Endpoint::AVTransport
   # Adds a track to the queue
   # @param[String] uri Uri of track
   # @param[String] didl Stanza of DIDL-Lite metadata (generally created by #add_spotify_to_queue)
+  # @param[Integer] position Optional queue insertion position. Leaving this blank inserts at the end.
   # @return[Integer] Queue position of the added track
-  def add_to_queue(uri, didl = '')
-    response = send_transport_message('AddURIToQueue', "<EnqueuedURI>#{uri}</EnqueuedURI><EnqueuedURIMetaData>#{didl}</EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>0</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>1</EnqueueAsNext>")
+  def add_to_queue(uri, didl = '', position = 0)
+    response = send_transport_message('AddURIToQueue', "<EnqueuedURI>#{uri}</EnqueuedURI><EnqueuedURIMetaData>#{didl}</EnqueuedURIMetaData><DesiredFirstTrackNumberEnqueued>#{position}</DesiredFirstTrackNumberEnqueued><EnqueueAsNext>1</EnqueueAsNext>")
     # TODO yeah, this error handling is a bit soft. For consistency's sake :)
     pos = response.xpath('.//FirstTrackNumberEnqueued').text
     if pos.length != 0
@@ -115,8 +116,9 @@ module Sonos::Endpoint::AVTransport
 
   # Adds a Spotify track to the queue along with extra data for better metadata retrieval
   # @param[Hash] opts Various options (id, user, region and type)
+  # @param[Integer] position Optional queue insertion position. Leaving this blank inserts at the end.
   # @return[Integer] Queue position of the added track(s)
-  def add_spotify_to_queue(opts = {})
+  def add_spotify_to_queue(opts = {}, position = 0)
     opts = {
       :id     => '',
       :user   => nil,
@@ -153,14 +155,15 @@ module Sonos::Endpoint::AVTransport
       return nil
     end
 
-    add_to_queue(uri, didl_metadata)
+    add_to_queue(uri, didl_metadata, position)
    end
 
    # Add an Rdio object to the queue (album or track), anything else can only
    # be streamed (play now).
    # @param[Hash] opts Various options (album/track keys, username and type)
+   # @param[Integer] position Optional queue insertion position. Leaving this blank inserts at the end.
    # @return[Integer] Queue position of the added track(s)
-   def add_rdio_to_queue(opts = {})
+   def add_rdio_to_queue(opts = {}, position = 0)
      opts = {
        :username => nil,
        :album    => nil,
@@ -191,7 +194,7 @@ module Sonos::Endpoint::AVTransport
        return nil
      end
 
-     add_to_queue(uri, didl_metadata)
+     add_to_queue(uri, didl_metadata, position)
    end
 
   # Removes a track from the queue
