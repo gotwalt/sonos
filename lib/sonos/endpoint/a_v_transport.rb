@@ -96,6 +96,11 @@ module Sonos::Endpoint::AVTransport
     parse_response send_transport_message('Seek', "<Unit>REL_TIME</Unit><Target>#{timestamp}</Target>")
   end
 
+  # Seeks the playlist selection to the provided index
+  def select_track(index)
+    parse_response send_transport_message('Seek', "<Unit>TRACK_NR</Unit><Target>#{index}</Target>")
+  end
+
   # Clear the queue
   def clear_queue
     parse_response parse_response send_transport_message('RemoveAllTracksFromQueue')
