@@ -43,8 +43,6 @@ module Sonos::Features::Voiceover
   end
 
   def play_blocking(uri)
-    puts "Playing track #{uri} on speaker #{name}"
-
     # queue up the track
     play uri
 
