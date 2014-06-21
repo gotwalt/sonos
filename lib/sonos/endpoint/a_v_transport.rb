@@ -48,6 +48,12 @@ module Sonos::Endpoint::AVTransport
     }
   end
 
+  # Returns true if the player is not in a paused or stopped state
+  def is_playing?
+    state = get_player_state[:state]
+    !['PAUSED_PLAYBACK', 'STOPPED'].include?(state)
+  end
+
   # Pause the currently playing track.
   def pause
     parse_response send_transport_message('Pause')

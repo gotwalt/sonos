@@ -1,5 +1,6 @@
 require 'savon'
 require 'sonos/endpoint'
+require 'sonos/features'
 
 module Sonos::Device
 
@@ -11,6 +12,7 @@ module Sonos::Device
     include Sonos::Endpoint::ContentDirectory
     include Sonos::Endpoint::Upnp
     include Sonos::Endpoint::Alarm
+    include Sonos::Features::Voiceover
 
     MODELS = {
       :'S1'    => 'PLAY:1',     # Released Oct 2013
