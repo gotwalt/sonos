@@ -3,6 +3,7 @@ require 'sonos/system'
 require 'sonos/discovery'
 require 'sonos/device'
 require 'sonos/group'
+require 'sonos/features'
 
 module Sonos
   PORT = 1400

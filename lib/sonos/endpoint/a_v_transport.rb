@@ -48,6 +48,12 @@ module Sonos::Endpoint::AVTransport
     }
   end
 
+  # Returns true if the player is not in a paused or stopped state
+  def is_playing?
+    state = get_player_state[:state]
+    !['PAUSED_PLAYBACK', 'STOPPED'].include?(state)
+  end
+
   # Pause the currently playing track.
   def pause
     parse_response send_transport_message('Pause')
@@ -88,6 +94,11 @@ module Sonos::Endpoint::AVTransport
     # Must be sent in the format of HH:MM:SS
     timestamp = Time.at(seconds).utc.strftime('%H:%M:%S')
     parse_response send_transport_message('Seek', "<Unit>REL_TIME</Unit><Target>#{timestamp}</Target>")
+  end
+
+  # Seeks the playlist selection to the provided index
+  def select_track(index)
+    parse_response send_transport_message('Seek', "<Unit>TRACK_NR</Unit><Target>#{index}</Target>")
   end
 
   # Clear the queue
