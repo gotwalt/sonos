@@ -103,7 +103,7 @@ module Sonos::Endpoint::AVTransport
 
   # Clear the queue
   def clear_queue
-    parse_response parse_response send_transport_message('RemoveAllTracksFromQueue')
+    parse_response send_transport_message('RemoveAllTracksFromQueue')
   end
 
   # Save queue
