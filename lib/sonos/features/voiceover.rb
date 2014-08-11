@@ -13,6 +13,11 @@ module Sonos::Features::Voiceover
     result.merge({duration: (Time.now - start_time )})
   end
 
+  def resume_queue
+    puts "resume queue"
+    play uid.gsub('uuid', 'x-rincon-queue') + '#0'
+  end
+
   protected
 
   def with_isolated_state
