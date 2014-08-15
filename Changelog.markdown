@@ -4,6 +4,7 @@
 * Add voiceover
 * Improve playlist handling
 * Allow to queue Rdio tracks/albums
+* Add setting a sleep timer
 
 ### Version 0.3.5 — February 4, 2014
 
