@@ -76,6 +76,38 @@ system.party_over
 
 All of this is based off of the raw `Sonos.system.topology`.
 
+### Services
+
+Currently there is support to queue items from the following services, provided
+the service accounts are set up:
+
+- Spotify
+  - tracks
+  - albums
+  - playlists
+  - top lists
+  - starred
+- Rdio
+  - tracks
+  - albums
+
+The way to add items differs per service at moment:
+
+For Spotify only the 'Spotify URI' is required:
+
+``` ruby
+speaker.add_spotify_to_queue('2CwulIyrmEYwbUWzcEVIhR')
+```
+
+Whereas for Rdio more information needs to be provided:
+
+``` ruby
+speaker.add_rdio_to_queue({
+  :track => '42083055',
+  :album => '3944937',
+  :username => 'RDIO_USERNAME_HERE' })
+```
+
 ### CLI
 
 There is a very limited CLI right now. You can run `sonos devices` to get the IP of all of your devices.
@@ -92,6 +124,7 @@ You can also run `sonos pause_all` to pause all your Sonos groups.
 * Detect stereo pair
 * CLI client for everything
 * Nonblocking calls with Celluloid::IO
+* Unified method of adding items from music services
 
 ### Features
 
