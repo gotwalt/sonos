@@ -1,3 +1,37 @@
+### Version 0.3.6 — not released yet
+
+* Unbreak clearing queue
+* Add voiceover
+* Improve playlist handling
+
+### Version 0.3.5 — February 4, 2014
+
+* Allow to queue Spotify items
+* Add basic line in support
+* Allow toggling status light
+
+### Version 0.3.4 — November 1, 2013
+
+* Rework UPNP subscription / unsubscriptino process
+* Add shuffle, repeat and crossfade
+* Add alarms
+* Add support for ZP120, Play:1 devices
+
+### Version 0.3.3 — June 29, 2013
+
+* Add party mode to CLI
+* Add support for Sub and Soundbar devices
+
+### Version 0.3.1 — June 28, 2013
+
+* Allow to specify a non-nil default IP
+* Add CLI command to list groups
+* Add ability to detect if speaker has music
+* Add more information to `now_playing` output
+* Support add/remove to queue
+* Add support for ZP80 devices
+* Add party mode
+
 ### Version 0.3.0 — February 2, 2013
 
 * System owns groups that reflect the topology
