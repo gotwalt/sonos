@@ -6,8 +6,8 @@ require 'sonos/version'
 Gem::Specification.new do |gem|
   gem.name          = 'sonos'
   gem.version       = Sonos::VERSION
-  gem.authors       = ['Sam Soffes', 'Aaron Gotwalt']
-  gem.email         = ['sam@soff.es', 'gotwalt@gmail.com']
+  gem.authors       = ['Sam Soffes', 'Aaron Gotwalt', 'Jasper Lievisse Adriaanse']
+  gem.email         = ['sam@soff.es', 'gotwalt@gmail.com', 'jasper@humppa.nl']
   gem.description   = 'Control Sonos speakers with Ruby'
   gem.summary       = gem.description
   gem.homepage      = 'https://github.com/soffes/sonos'
