@@ -3,10 +3,11 @@
 * Unbreak clearing queue
 * Add voiceover
 * Improve playlist handling
+* Allow to queue Rdio tracks/albums
 
 ### Version 0.3.5 — February 4, 2014
 
-* Allow to queue Spotify items
+* Allow to queue Spotify tracks/albums/playlists/top lists/starred
 * Add basic line in support
 * Allow toggling status light
 
