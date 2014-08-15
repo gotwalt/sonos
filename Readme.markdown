@@ -59,6 +59,7 @@ speaker.add_to_queue 'http://assets.samsoff.es/music/Airports.mp3'
 speaker.remove_from_queue(speaker.queue[:items].last[:queue_id])
 speaker.save_queue 'Jams'
 speaker.clear_queue
+speaker.set_sleep_timer '00:13:00'
 ```
 
 Or go into what the official control from Sonos, Inc. calls "Party
