@@ -148,7 +148,6 @@ You can also run `sonos pause_all` to pause all your Sonos groups.
 If we are implementing everything the official Sonos Controller does, here's some more stuff:
 
 * Set zone name and icon
-* Create stero pair
 * Support for SUB
 * Support for DOCK
 * Support for CONNECT:AMP (not sure if this is any different from CONNECT)

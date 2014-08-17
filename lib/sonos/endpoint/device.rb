@@ -16,6 +16,20 @@ module Sonos::Endpoint::Device
     parse_response send_device_message('SetLEDState', enabled ? 'On' : 'Off')
   end
 
+  # Create a stereo pair of two speakers.
+  # This does not take into account which type of players support bonding.
+  # Currently only S1/S3 (play:1/play:3) support this but future players may
+  # gain this abbility too.
+  # @param left [String] uid of the left speaker
+  # @param right [String] uid of the right speaker
+  def create_pair(left, right)
+    parse_response = send_bonding_message('AddBondedZones', "#{left}:LF,LF;#{right}:RF,RF")
+  end
+
+  def separate_pair
+    parse_response = send_bonding_message('RemoveBondedZones', '')
+  end
+
 private
 
   def device_client
@@ -26,6 +40,12 @@ private
     action = "#{DEVICE_XMLNS}##{name}"
     attribute = name.sub('Set', '')
     message = %Q{<u:#{name} xmlns:u="#{DEVICE_XMLNS}"><Desired#{attribute}>#{value}</Desired#{attribute}>}
+    device_client.call(name, soap_action: action, message: message)
+  end
+
+  def send_bonding_message(name, value)
+    action = "#{DEVICE_XMLNS}##{name}"
+    message = %Q{<u:#{name} xmlns:u="#{DEVICE_XMLNS}"><ChannelMapSet>#{value}</ChannelMapSet></u:#{name}>}
     device_client.call(name, soap_action: action, message: message)
   end
 end
