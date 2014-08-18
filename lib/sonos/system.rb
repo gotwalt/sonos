@@ -102,6 +102,9 @@ module Sonos
           master = node if node.coordinator == "true"
         end
 
+        # Skip this group if there is no master
+        next if master.nil?
+
         # register other nodes in groups as slave nodes
         nodes = []
         @topology.each do |node|
@@ -109,9 +112,6 @@ module Sonos
           next unless node.group == group_uid
           nodes << node unless node.uuid == master.uuid
         end
-
-        # Skip this group if there is no master
-        next if master.nil?
 
         # Add the group
         @groups << Group.new(master.device, nodes.collect(&:device))
