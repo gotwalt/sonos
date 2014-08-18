@@ -6,6 +6,7 @@
 * Allow to queue Rdio tracks/albums
 * Add setting a sleep timer
 * Allow to queue items at arbitrary positions in the playlist
+* Make party mode initialization more robust
 
 ### Version 0.3.5 — February 4, 2014
 
