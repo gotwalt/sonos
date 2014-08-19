@@ -19,13 +19,13 @@ module Sonos::Endpoint::Device
   # Create a stereo pair of two speakers.
   # This does not take into account which type of players support bonding.
   # Currently only S1/S3 (play:1/play:3) support this but future players may
-  # gain this abbility too.
-  # @param left [Sonos::Device::Speaker] Left speaker
+  # gain this abbility too. The speaker on which this method is called is
+  # assumed to be the left speaker of the pair.
   # @param right [Sonos::Device::Speaker] Right speaker
-  def create_pair(left, right)
-    left_uid = left.uid.sub!('uuid:', '')
-    right_uid = right.uid.sub!('uuid:', '')
-    parse_response = send_bonding_message('AddBondedZones', "#{left_uid}:LF,LF;#{right_uid}:RF,RF")
+  def create_pair_with(right)
+    left = self.uid.sub!('uuid:', '')
+    right = right.uid.sub!('uuid:', '')
+    parse_response = send_bonding_message('AddBondedZones', "#{left}:LF,LF;#{right}:RF,RF")
   end
 
   def separate_pair
