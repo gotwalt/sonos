@@ -20,10 +20,12 @@ module Sonos::Endpoint::Device
   # This does not take into account which type of players support bonding.
   # Currently only S1/S3 (play:1/play:3) support this but future players may
   # gain this abbility too.
-  # @param left [String] uid of the left speaker
-  # @param right [String] uid of the right speaker
+  # @param left [Sonos::Device::Speaker] Left speaker
+  # @param right [Sonos::Device::Speaker] Right speaker
   def create_pair(left, right)
-    parse_response = send_bonding_message('AddBondedZones', "#{left}:LF,LF;#{right}:RF,RF")
+    left_uid = left.uid.sub!('uuid:', '')
+    right_uid = right.uid.sub!('uuid:', '')
+    parse_response = send_bonding_message('AddBondedZones', "#{left_uid}:LF,LF;#{right_uid}:RF,RF")
   end
 
   def separate_pair
