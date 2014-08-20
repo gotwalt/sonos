@@ -1,4 +1,4 @@
-### Version 0.3.6 — not released yet
+### Version 0.3.6 — August 20, 2014
 
 * Unbreak clearing the queue
 * Add voiceover
