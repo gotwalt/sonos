@@ -4,9 +4,19 @@ module Sonos::Endpoint::ContentDirectory
 
   # Get the current queue
   def queue(starting_index = 0, requested_count = 100)
+    container_contents "Q:0", starting_index, requested_count
+  end
+  
+  # Get the radio station listing ("My Radio Stations")
+  def radio_stations(starting_index = 0, requested_count = 100)
+    container_contents "R:0/0", starting_index, requested_count
+  end
+  
+  # Get the contents of a given content directory container
+  def container_contents(container, starting_index, requested_count)
     name = 'Browse'
     action = "#{CONTENT_DIRECTORY_XMLNS}##{name}"
-    message = %Q{<u:#{name} xmlns:u="#{CONTENT_DIRECTORY_XMLNS}"><ObjectID>Q:0</ObjectID><BrowseFlag>BrowseDirectChildren</BrowseFlag><Filter>dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI</Filter><StartingIndex>#{starting_index}</StartingIndex><RequestedCount>#{requested_count}</RequestedCount><SortCriteria></SortCriteria></u:Browse>}
+    message = %Q{<u:#{name} xmlns:u="#{CONTENT_DIRECTORY_XMLNS}"><ObjectID>#{container}</ObjectID><BrowseFlag>BrowseDirectChildren</BrowseFlag><Filter>dc:title,res,dc:creator,upnp:artist,upnp:album,upnp:albumArtURI</Filter><StartingIndex>#{starting_index}</StartingIndex><RequestedCount>#{requested_count}</RequestedCount><SortCriteria></SortCriteria></u:Browse>}
     result = content_directory_client.call name, soap_action: action, message: message
     body = result.body[:browse_response]
 
