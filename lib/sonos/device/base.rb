@@ -12,13 +12,10 @@ module Sonos::Device
       data = retrieve_information(ip)
       model_number = data[:model_number]
 
-      # TODO: Clean up
-      if Accessory.models.keys.include?(model_number.to_sym)
-        Accessory.new(ip, data)
-      elsif Speaker.models.keys.include?(model_number.to_sym)
+      if data[:devices].include?('urn:schemas-upnp-org:device:MediaRenderer:1')
         Speaker.new(ip, data)
       else
-        raise ArgumentError.new("#{data[:model_number]} not supported")
+        Accessory.new(ip, data)
       end
     end
 
@@ -59,7 +56,7 @@ module Sonos::Device
     # Get the device's model
     # @return [String] a string representation of the device's model
     def model
-      self.class.models[@model_number.to_sym]
+      @model_number.to_s
     end
 
     # Can this device play music?
@@ -90,6 +87,8 @@ module Sonos::Device
         zone_type: doc.xpath('/xmlns:root/xmlns:device/xmlns:zoneType').inner_text,
         model_number: doc.xpath('/xmlns:root/xmlns:device/xmlns:modelNumber').inner_text,
         services: doc.xpath('/xmlns:root/xmlns:device/xmlns:serviceList/xmlns:service/xmlns:serviceId').
+          collect(&:inner_text),
+        devices: doc.xpath('/xmlns:root/xmlns:device/xmlns:deviceList/xmlns:device/xmlns:deviceType').
           collect(&:inner_text)
       }
     end
