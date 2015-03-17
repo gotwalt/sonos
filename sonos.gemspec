@@ -23,4 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'nokogiri'
   gem.add_dependency 'thor'
   gem.add_dependency 'httpclient'
+  gem.add_dependency 'ssdp'
 end
