@@ -1,7 +1,5 @@
-require 'socket'
-require 'ipaddr'
-require 'timeout'
 require 'sonos/topology_node'
+require 'ssdp'
 
 #
 # Inspired by https://github.com/rahims/SoCo, https://github.com/turboladen/upnp,
@@ -22,17 +20,15 @@ module Sonos
     attr_reader :first_device_ip
     attr_reader :default_ip
 
-    def initialize(timeout = DEFAULT_TIMEOUT, default_ip = nil)
+    def initialize(timeout = DEFAULT_TIMEOUT)
       @timeout = timeout
-      @default_ip = default_ip
-      initialize_socket
     end
 
     # Look for Sonos devices on the network and return the first IP address found
     # @return [String] the IP address of the first Sonos device found
     def discover
-      send_discovery_message
-      @first_device_ip = listen_for_responses
+      result = SSDP::Consumer.new.search(service: 'urn:schemas-upnp-org:device:ZonePlayer:1', first_only: true, timeout: @timeout)
+      @first_device_ip = result[:address]
     end
 
     # Find all of the Sonos devices on the network
@@ -45,47 +41,6 @@ module Sonos
       doc.xpath('//ZonePlayers/ZonePlayer').map do |node|
         TopologyNode.new(node)
       end
-    end
-
-  private
-
-    def send_discovery_message
-      # Request announcements
-      @socket.send(search_message, 0, MULTICAST_ADDR, MULTICAST_PORT)
-    end
-
-    def listen_for_responses
-      begin
-        Timeout::timeout(timeout) do
-          loop do
-            message, info = @socket.recvfrom(2048)
-            # return the IP address
-            return info[2]
-          end
-        end
-      rescue Timeout::Error => ex
-        puts 'Timed out...'
-        puts 'Switching to the default IP' if @default_ip
-        return @default_ip
-      end
-    end
-
-    def initialize_socket
-      # Create a socket
-      @socket = UDPSocket.open
-
-      # We're going to use IP with the multicast TTL
-      @socket.setsockopt(Socket::Option.new(:INET, :IPPROTO_IP, :IP_MULTICAST_TTL, 2.chr))
-    end
-
-    def search_message
-     [
-        'M-SEARCH * HTTP/1.1',
-        "HOST: #{MULTICAST_ADDR}:reservedSSDPport",
-        'MAN: ssdp:discover',
-        "MX: #{timeout}",
-        "ST: urn:schemas-upnp-org:device:ZonePlayer:1"
-      ].join("\n")
     end
   end
 end
