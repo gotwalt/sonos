@@ -27,7 +27,7 @@ module Sonos
     # Look for Sonos devices on the network and return the first IP address found
     # @return [String] the IP address of the first Sonos device found
     def discover
-      result = SSDP::Consumer.new.search(service: 'urn:schemas-upnp-org:device:ZonePlayer:1', first_only: true, timeout: @timeout)
+      result = SSDP::Consumer.new.search(service: 'urn:schemas-upnp-org:device:ZonePlayer:1', first_only: true, timeout: @timeout, filter: lambda {|r| r[:params]["ST"].match(/ZonePlayer/) })
       @first_device_ip = result[:address]
     end
 
