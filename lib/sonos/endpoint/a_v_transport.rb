@@ -39,13 +39,14 @@ module Sonos::Endpoint::AVTransport
   # Get information about the state the player is in.
   def get_player_state
     response = send_transport_message('GetTransportInfo')
-    body = response.body[:get_transport_info_response]
-
-    {
-      status: body[:current_transport_status],
-      state:  body[:current_transport_state],
-      speed:  body[:current_speed],
-    }
+    if response
+      body = response.body[:get_transport_info_response]
+      {
+        status: body[:current_transport_status],
+        state:  body[:current_transport_state],
+        speed:  body[:current_speed],
+      }
+    end
   end
 
   # Returns true if the player is not in a paused or stopped state
@@ -253,12 +254,16 @@ module Sonos::Endpoint::AVTransport
   end
 
   def transport_client
-    @transport_client ||= Savon.client endpoint: "http://#{self.group_master.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log: Sonos.logging_enabled
+    if self.group_master
+      @transport_client ||= Savon.client endpoint: "http://#{self.group_master.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log: Sonos.logging_enabled
+    end
   end
 
   def send_transport_message(name, part = '<Speed>1</Speed>')
     action = "#{TRANSPORT_XMLNS}##{name}"
     message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID>#{part}</u:#{name}>}
-    transport_client.call(name, soap_action: action, message: message)
+    if transport_client
+      transport_client.call(name, soap_action: action, message: message)
+    end
   end
 end
