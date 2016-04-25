@@ -64,6 +64,21 @@ module Sonos
       speakers[0]
     end
 
+    def find_speaker_by_name(name)
+      speakers.each do |speaker|
+        return speaker if(speaker.name == name)
+      end
+      return nil
+    end
+
+    def find_speaker_by_uid(uid)
+      uid = "uuid:" + uid unless uid[0,5] == "uuid:"
+      speakers.each do |speaker|
+        return speaker if(speaker.uid == uid)
+      end
+      return nil
+    end
+
     # Party's over :(
     def party_over
       groups.each { |g| g.disband }
