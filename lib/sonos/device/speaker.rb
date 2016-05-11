@@ -78,5 +78,9 @@ module Sonos::Device
       playmode
     end
 
+    def use_queue
+      set_av_transport_uri('x-rincon-queue:' + self.uid.sub('uuid:', '') + '#0')
+    end
+
   end
 end
