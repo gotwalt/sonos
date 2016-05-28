@@ -142,15 +142,13 @@ module Sonos::Endpoint::AVTransport
     return nil if opts[:type] == 'playlist' and opts[:user].nil?
     return nil if opts[:type] =~ /toplist_tracks/ and opts[:region].nil?
 
-    # In order for the player to retrieve track duration, artist, album etc
-    # we need to pass it some metadata ourselves.
-    didl_metadata = "&lt;DIDL-Lite xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:upnp=&quot;urn:schemas-upnp-org:metadata-1-0/upnp/&quot; xmlns:r=&quot;urn:schemas-rinconnetworks-com:metadata-1-0/&quot; xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&quot;&gt;&lt;item id=&quot;#{rand(10000000..99999999)}spotify%3a#{opts[:type]}%3a#{opts[:id]}&quot; restricted=&quot;true&quot;&gt;&lt;dc:title&gt;&lt;/dc:title&gt;&lt;upnp:class&gt;object.item.audioItem.musicTrack&lt;/upnp:class&gt;&lt;desc id=&quot;cdudn&quot; nameSpace=&quot;urn:schemas-rinconnetworks-com:metadata-1-0/&quot;&gt;SA_RINCON2311_X_#Svc2311-0-Token&lt;/desc&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;"
-
-    r_id = rand(10000000..99999999)
-
+    r_id = rand(10000000..19999999)
+    upnp_class = 'object.item.audioItem.musicTrack'
+    
     case opts[:type]
     when /playlist/
       uri = "x-rincon-cpcontainer:#{r_id}spotify%3auser%3a#{opts[:user]}%3aplaylist%3a#{opts[:id]}"
+      upnp_class = 'object.container.playlistContainer'
     when /toplist_(tracks)/
       subtype = opts[:type].sub('toplist_', '') # only 'tracks' are supported right now by Sonos.
       uri = "x-rincon-cpcontainer:#{r_id}toplist%2f#{subtype}%2fregion%2f#{opts[:region]}"
@@ -165,6 +163,12 @@ module Sonos::Endpoint::AVTransport
     else
       return nil
     end
+    
+    # In order for the player to retrieve track duration, artist, album etc
+    # we need to pass it some metadata ourselves.
+    didl_metadata = <<DIDL
+    &lt;DIDL-Lite xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/" xmlns:r="urn:schemas-rinconnetworks-com:metadata-1-0/" xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"&gt;&lt;item id="#{rand(10000000..19999999)}spotify%3a#{opts[:type]}%3a#{opts[:id]}" restricted="true"&gt;&lt;dc:title&gt;&lt;/dc:title&gt;&lt;upnp:class&gt;#{upnp_class}&lt;/upnp:class&gt;&lt;desc id="cdudn" nameSpace="urn:schemas-rinconnetworks-com:metadata-1-0/"&gt;SA_RINCON2311_X_#Svc2311-0-Token&lt;/desc&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;
+DIDL
 
     add_to_queue(uri, didl_metadata, position)
    end
@@ -259,6 +263,8 @@ module Sonos::Endpoint::AVTransport
   def send_transport_message(name, part = '<Speed>1</Speed>')
     action = "#{TRANSPORT_XMLNS}##{name}"
     message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID>#{part}</u:#{name}>}
+    
+    puts message
     transport_client.call(name, soap_action: action, message: message)
   end
 end
