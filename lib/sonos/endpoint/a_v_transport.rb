@@ -229,7 +229,7 @@ module Sonos::Endpoint::AVTransport
   # Ungroup from its current group.
   # Trying to call this on a stereo pair slave will fail.
   def ungroup
-    parse_response send_transport_message('BecomeCoordinatorOfStandaloneGroup')
+    parse_response send_transport_message('BecomeCoordinatorOfStandaloneGroup', nil, false)
   end
 
   # Set a sleep timer up to 23:59:59
@@ -252,13 +252,15 @@ module Sonos::Endpoint::AVTransport
     send_transport_message('SetAVTransportURI', "<CurrentURI>#{uri}</CurrentURI><CurrentURIMetaData></CurrentURIMetaData>")
   end
 
-  def transport_client
-    @transport_client ||= Savon.client endpoint: "http://#{self.group_master.ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log: Sonos.logging_enabled
+  def transport_client(apply_to_master)
+    ip = apply_to_master ? self.group_master.ip : self.ip
+    @transport_client ||= Savon.client endpoint: "http://#{ip}:#{Sonos::PORT}#{TRANSPORT_ENDPOINT}", namespace: Sonos::NAMESPACE, log: Sonos.logging_enabled
   end
 
-  def send_transport_message(name, part = '<Speed>1</Speed>')
+  def send_transport_message(name, part = '<Speed>1</Speed>', apply_to_master=true)
     action = "#{TRANSPORT_XMLNS}##{name}"
     message = %Q{<u:#{name} xmlns:u="#{TRANSPORT_XMLNS}"><InstanceID>0</InstanceID>#{part}</u:#{name}>}
-    transport_client.call(name, soap_action: action, message: message)
+    transport_client(apply_to_master).call(name, soap_action: action, message: message)
   end
+
 end
