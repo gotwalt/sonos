@@ -61,9 +61,11 @@ module Sonos::Endpoint::AVTransport
 
   # Play the currently selected track or play a stream.
   # @param [String] uri Optional uri of the track to play. Leaving this blank, plays the current track.
-  def play(uri = nil)
+  # @param [String] title Optional title for the track, to be displayed in the UI.
+  def play(uri = nil, title = uri)
     # Play a song from the uri
-    set_av_transport_uri(uri) and return if uri
+    didl = "&lt;DIDL-Lite xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:upnp=&quot;urn:schemas-upnp-org:metadata-1-0/upnp/&quot; xmlns:r=&quot;urn:schemas-rinconnetworks-com:metadata-1-0/&quot; xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&quot;&gt;&lt;item&gt;&lt;dc:title&gt;#{title}&lt;/dc:title&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;";
+    set_av_transport_uri(uri, didl) and return if uri
 
     # Play the currently selected track
     parse_response send_transport_message('Play')
