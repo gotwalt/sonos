@@ -32,6 +32,12 @@ module Sonos::Endpoint::AVTransport
     }
   end
 
+  def is_tv?
+    response = send_transport_message('GetPositionInfo')
+    body = response.body[:get_position_info_response]
+    body[:track_uri] =~ /\Ax-sonos-htastream:/ ? true : false
+  end
+
   def has_music?
     !now_playing.nil?
   end
@@ -52,6 +58,11 @@ module Sonos::Endpoint::AVTransport
   def is_playing?
     state = get_player_state[:state]
     !['PAUSED_PLAYBACK', 'STOPPED'].include?(state)
+  end
+
+  # Returns true if speaker is quiescent. Playbar "playing" an unconnected TV counts as inactive.
+  def inactive?
+    is_playing? == false || (is_tv? == true && get_zone_info[:ht_audio_in] == "0")
   end
 
   # Pause the currently playing track.
@@ -86,6 +97,10 @@ module Sonos::Endpoint::AVTransport
 
   def line_in(speaker)
     set_av_transport_uri('x-rincon-stream:' + speaker.uid.sub('uuid:', ''))
+  end
+
+  def tv
+    set_av_transport_uri('x-sonos-htastream:%s:spdif' % uid.sub('uuid:', ''))
   end
 
   # Seeks to a given timestamp in the current track

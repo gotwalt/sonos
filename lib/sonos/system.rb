@@ -31,6 +31,10 @@ module Sonos
       end
     end
 
+    def inactive?
+      speakers.all? &:inactive?
+    end
+
     # Party Mode!  Join all speakers into a single group.
     def party_mode new_master = nil
       return nil unless speakers.length > 1
