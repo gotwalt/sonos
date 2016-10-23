@@ -16,6 +16,10 @@ module Sonos::Endpoint::Device
     parse_response send_device_message('SetLEDState', enabled ? 'On' : 'Off')
   end
 
+  def get_zone_info
+    send_device_message('GetZoneInfo', '').body[:get_zone_info_response]
+  end
+
   # Create a stereo pair of two speakers.
   # This does not take into account which type of players support bonding.
   # Currently only S1/S3 (play:1/play:3) support this but future players may
