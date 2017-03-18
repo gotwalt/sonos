@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 1.9.2'
   gem.add_dependency 'savon', '~> 2.0'
-  gem.add_dependency 'nokogiri'
+  gem.add_dependency 'nokogiri', '~> 1.6.8'
   gem.add_dependency 'thor'
   gem.add_dependency 'httpclient'
   gem.add_dependency 'ssdp'
