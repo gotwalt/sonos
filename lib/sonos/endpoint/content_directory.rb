@@ -31,7 +31,7 @@ module Sonos::Endpoint::ContentDirectory
       start = starting_index
       while hash[:items].count < hash[:total]
         start += requested_count
-        hash[:items] += browse(start, requested_count)[:items]
+        hash[:items] += queue(start, requested_count)[:items]
       end
     end
 
